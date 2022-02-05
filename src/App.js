@@ -21,9 +21,9 @@ function App() {
       : setIsAuthenticated(false);
   }, []);
 
-  const handleLogin = async (accesToken) => {
+  const handleLogin = async (accessToken) => {
     setIsAuthenticated(true);
-    localStorage.setItem('jwt', accesToken);
+    localStorage.setItem('jwt', accessToken);
   };
 
   const handleLogout = async () => {

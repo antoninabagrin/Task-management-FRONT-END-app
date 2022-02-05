@@ -12,17 +12,7 @@ import { Link } from '@mui/material';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-async function userLogin(credentials) {
-  console.log(credentials);
-  return fetch('http://localhost:3000/auth/signin', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
-}
+import axios from '../utils/axios';
 
 export default function SignIn({ handleLogin }) {
   const [username, setUsername] = useState();
@@ -40,14 +30,10 @@ export default function SignIn({ handleLogin }) {
     setPassword(data.get('password'));
 
     if (username && password) {
-      const token = await userLogin({
-        username,
-        password,
-      });
-
+      const res = await axios.post('/auth/signin', { username, password });
+      const token = res.data.accessToken;
       if (token) {
-        // console.log(token);
-        handleLogin(token.accesToken);
+        handleLogin(token);
         navigate(from, { replace: true });
       }
     }
@@ -65,52 +51,52 @@ export default function SignIn({ handleLogin }) {
         <Avatar>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component='h1' variant='h5'>
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit}>
+        <Box component='form' onSubmit={handleSubmit}>
           <TextField
-            margin="normal"
+            margin='normal'
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            id='username'
+            label='Username'
+            name='username'
+            autoComplete='username'
             autoFocus
             onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
-            margin="normal"
+            margin='normal'
             required
             fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
+            name='password'
+            label='Password'
+            type='password'
+            id='password'
+            autoComplete='current-password'
             onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            control={<Checkbox value='remember' color='primary' />}
+            label='Remember me'
           />
           <Button
-            type="submit"
+            type='submit'
             fullWidth
-            variant="contained"
+            variant='contained'
             onClick={handleLogin}
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href='#' variant='body2'>
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href='#' variant='body2'>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
