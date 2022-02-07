@@ -13,12 +13,15 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
+import { useDispatch } from 'react-redux';
+import { handleLogin, setIsAuth } from '../features/userSlice';
 
-export default function SignIn({ handleLogin }) {
+export default function SignIn() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const from = location.state?.from?.pathname || '/protected';
 
@@ -32,8 +35,10 @@ export default function SignIn({ handleLogin }) {
     if (username && password) {
       const res = await axios.post('/auth/signin', { username, password });
       const token = res.data.accessToken;
+
       if (token) {
-        handleLogin(token);
+        localStorage.setItem('jwt', token);
+        dispatch(setIsAuth(true));
         navigate(from, { replace: true });
       }
     }
@@ -51,52 +56,52 @@ export default function SignIn({ handleLogin }) {
         <Avatar>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component='h1' variant='h5'>
+        <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component='form' onSubmit={handleSubmit}>
+        <Box component="form" onSubmit={handleSubmit}>
           <TextField
-            margin='normal'
+            margin="normal"
             required
             fullWidth
-            id='username'
-            label='Username'
-            name='username'
-            autoComplete='username'
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
             onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
-            margin='normal'
+            margin="normal"
             required
             fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            autoComplete='current-password'
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
           />
           <Button
-            type='submit'
+            type="submit"
             fullWidth
-            variant='contained'
+            variant="contained"
             onClick={handleLogin}
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href='#' variant='body2'>
+              <Link href="#" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href='#' variant='body2'>
+              <Link href="#" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -107,6 +112,6 @@ export default function SignIn({ handleLogin }) {
   );
 }
 
-SignIn.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
-};
+// SignIn.propTypes = {
+//   handleLogin: PropTypes.func.isRequired,
+// };

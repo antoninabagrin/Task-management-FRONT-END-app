@@ -4,12 +4,16 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CssBaseline } from '@mui/material';
+import { Provider } from 'react-redux';
+import store from './store';
 
 ReactDOM.render(
   <React.StrictMode>
     <CssBaseline>
       <BrowserRouter>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </BrowserRouter>
     </CssBaseline>
   </React.StrictMode>,
