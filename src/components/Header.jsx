@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { handleLogout, setIsAuth } from '../features/userSlice';
+import { setIsAuth } from '../features/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function Header() {

@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { Link } from '@mui/material';
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 import { useDispatch } from 'react-redux';

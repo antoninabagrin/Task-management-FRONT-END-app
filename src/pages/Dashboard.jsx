@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
   Paper,
   Table,
@@ -7,33 +8,30 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React, { useState, useEffect } from 'react';
-const axios = require('axios');
+import { useDispatch, useSelector } from 'react-redux';
+import { getTasks, selectTasks } from '../features/tasks/tasksSlice';
+import axios from '../utils/axios';
 
-// function createData(title, description, status) {
-//   return {
-//     title,
-//     description,
-//     status,
-//   };
-// }
-
-function GetAllTasks() {
-  const [tasks, setTasks] = useState([]);
+function Dashboard() {
+  const dispatch = useDispatch();
+  const isAuth = useSelector((state) => state.user.isAuth);
+  const tasks = useSelector(selectTasks);
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
+    console.log('token', token);
+    dispatch(getTasks(token));
 
-    const axiosTasks = async () => {
-      const response = await axios.get('http://localhost:3000/tasks', {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      });
-      setTasks(response.data);
-    };
-    axiosTasks();
-  }, []);
+    //   //   const axiosTasks = async () => {
+    //   //     const response = await axios.get('http://localhost:3000/tasks', {
+    //   //       headers: {
+    //   //         Authorization: 'Bearer ' + token,
+    //   //       },
+    //   //     });
+    //   //     setTasks(response.data);
+    //   //   };
+    //   //   axiosTasks();
+  }, [dispatch]);
 
   return (
     <TableContainer component={Paper}>
@@ -46,7 +44,7 @@ function GetAllTasks() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {tasks.map((task, index) => (
+          {tasks.tasks.map((task, index) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -62,15 +60,4 @@ function GetAllTasks() {
   );
 }
 
-// const getAllTasks = tasks.map((task) => {
-//   console.log(tasks);
-//   return (
-//     <div>
-//       <h2>{tasks.title}</h2>
-//       <h3>{task.description}</h3>
-//       <p>{tasks.status}</p>
-//     </div>
-//   );
-// });
-
-export default GetAllTasks;
+export default Dashboard;
