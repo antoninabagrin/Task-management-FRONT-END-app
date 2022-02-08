@@ -1,14 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from '../../utils/axios';
 
 export const getTasks = createAsyncThunk(
   'tasks/getTasks',
 
-  async (token, thunkAPI) => {
-    const res = await axios.get(`http://localhost:3000/tasks`, {
-      headers: { Authorization: 'Bearer' + token },
-    });
-    console.log('res', res.data);
+  async () => {
+    const res = await axios.get('/tasks');
     return res.data;
   },
 );
