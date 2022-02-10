@@ -13,33 +13,21 @@ import { getTasks, selectTasks } from '../features/tasks/tasksSlice';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const isAuth = useSelector((state) => state.user.isAuth);
+
   const tasks = useSelector(selectTasks);
 
   useEffect(() => {
-    //   const token = localStorage.getItem('jwt');
-    //   console.log('token', token);
     dispatch(getTasks());
-
-    //   //   //   const axiosTasks = async () => {
-    //   //   //     const response = await axios.get('http://localhost:3000/tasks', {
-    //   //   //       headers: {
-    //   //   //         Authorization: 'Bearer ' + token,
-    //   //   //       },
-    //   //   //     });
-    //   //   //     setTasks(response.data);
-    //   //   //   };
-    //   //   //   axiosTasks();
-  }, []);
+  }, [dispatch]);
 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
         <TableHead>
           <TableRow>
-            <TableCell align='right'>Title</TableCell>
-            <TableCell align='right'>Description</TableCell>
-            <TableCell align='right'>Status</TableCell>
+            <TableCell align='center'>Title</TableCell>
+            <TableCell align='center'>Description</TableCell>
+            <TableCell align='center'>Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -48,9 +36,9 @@ export default function Dashboard() {
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell align='right'>{task.title}</TableCell>
-              <TableCell align='right'>{task.description}</TableCell>
-              <TableCell align='right'>{task.status}</TableCell>
+              <TableCell align='center'>{task.title}</TableCell>
+              <TableCell align='center'>{task.description}</TableCell>
+              <TableCell align='center'>{task.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>

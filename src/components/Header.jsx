@@ -6,10 +6,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setIsAuth } from '../features/userSlice';
-import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const isAuth = useSelector((state) => state.user.isAuth);
@@ -24,33 +23,41 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar>
           <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='menu'
             sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
             News
           </Typography>
           {!isAuth && (
-            <Link to="/signin">
-              <Button color="inherit">Sign In</Button>
+            <Link
+              to='/signin'
+              style={{ textDecoration: 'none', color: 'white' }}
+            >
+              <Button variant='text' color='inherit'>
+                Sign In
+              </Button>
             </Link>
           )}
           {isAuth && (
-            <Button onClick={() => Logout()} color="inherit">
+            <Button onClick={() => Logout()} color='inherit'>
               Sign Out
             </Button>
           )}
           {!isAuth && (
-            <Link to="/dashboard">
-              <Button color="inherit">Dashboard</Button>
+            <Link
+              to='/dashboard'
+              style={{ textDecoration: 'none', color: 'white' }}
+            >
+              <Button color='inherit'>Dashboard</Button>
             </Link>
           )}
         </Toolbar>

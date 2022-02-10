@@ -16,17 +16,18 @@ const tasksSlice = createSlice({
     tasks: [],
     loading: 'idle',
   },
-  extraReducers: {
-    [getTasks.pending]: (state, action) => {
-      state.status = 'loading';
-    },
-    [getTasks.fulfilled]: (state, { payload }) => {
-      state.tasks = state.tasks.concat(payload);
-      state.status = 'success';
-    },
-    [getTasks.rejected]: (state, action) => {
-      state.status = 'failed';
-    },
+  extraReducers(builder) {
+    builder
+      .addCase(getTasks.pending, (state, _action) => {
+        state.status = 'loading';
+      })
+      .addCase(getTasks.fulfilled, (state, action) => {
+        state.tasks = action.payload;
+        state.status = 'success';
+      })
+      .addCase(getTasks.rejected, (state, _action) => {
+        state.status = 'failed';
+      });
   },
 });
 
