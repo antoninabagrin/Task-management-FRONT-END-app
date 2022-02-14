@@ -133,7 +133,7 @@ export function SignUp() {
             Join
           </Button>
           <Grid container justifyContent='flex-end'>
-            <Link href='#' variant='body2'>
+            <Link href='/signin' variant='body2'>
               <Grid item>Already have an account? Sign in</Grid>
             </Link>
           </Grid>
