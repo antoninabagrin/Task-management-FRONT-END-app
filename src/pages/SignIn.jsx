@@ -10,15 +10,17 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { Link } from '@mui/material';
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
+import { useDispatch } from 'react-redux';
+import { handleLogin, setIsAuth } from '../features/userSlice';
 
-export default function SignIn({ handleLogin }) {
+export default function SignIn() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const from = location.state?.from?.pathname || '/protected';
 
@@ -32,8 +34,10 @@ export default function SignIn({ handleLogin }) {
     if (username && password) {
       const res = await axios.post('/auth/signin', { username, password });
       const token = res.data.accessToken;
+
       if (token) {
-        handleLogin(token);
+        localStorage.setItem('jwt', token);
+        dispatch(setIsAuth(true));
         navigate(from, { replace: true });
       }
     }
@@ -106,7 +110,3 @@ export default function SignIn({ handleLogin }) {
     </>
   );
 }
-
-SignIn.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
-};

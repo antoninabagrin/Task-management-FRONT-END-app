@@ -11,13 +11,13 @@ import {
   Link,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-const axios = require('axios');
+import axios from '../utils/axios';
 
 export function SignUp() {
   const history = useNavigate();
-  const fetchAllData = (allData) => {
+  const res = (allData) => {
     axios
-      .post('http://localhost:3000/auth/signup', {
+      .post('/auth/signup', {
         firstName: allData.firstName,
         lastName: allData.lastName,
         email: allData.email,
@@ -55,7 +55,7 @@ export function SignUp() {
       allData.username
     ) {
       if (allData.password === allData.passwordConform) {
-        fetchAllData(allData);
+        res(allData);
       } else {
         alert('Password and confirm password doesnt match');
       }
@@ -75,19 +75,19 @@ export function SignUp() {
         }}
       >
         <Avatar></Avatar>
-        <Typography component="h1" variant="h5" margin="5">
+        <Typography component='h1' variant='h5' margin='5'>
           Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit}>
+        <Box component='form' onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="given-name"
-                name="firstName"
+                autoComplete='given-name'
+                name='firstName'
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id='firstName'
+                label='First Name'
                 autoFocus
               />
             </Grid>
@@ -95,45 +95,45 @@ export function SignUp() {
               <TextField
                 required
                 fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
+                id='lastName'
+                label='Last Name'
+                name='lastName'
+                autoComplete='family-name'
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id='email'
+                label='Email Address'
+                name='email'
+                autoComplete='email'
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
+                name='password'
+                label='Password'
+                type='password'
+                id='password'
+                autoComplete='new-password'
               />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="term" color="primary" />}
-                label=" I accept the terms and conditions."
+                control={<Checkbox value='term' color='primary' />}
+                label=' I accept the terms and conditions.'
               />
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained">
+          <Button type='submit' fullWidth variant='contained'>
             Join
           </Button>
-          <Grid container justifyContent="flex-end">
-            <Link href="#" variant="body2">
+          <Grid container justifyContent='flex-end'>
+            <Link href='#' variant='body2'>
               <Grid item>Already have an account? Sign in</Grid>
             </Link>
           </Grid>
