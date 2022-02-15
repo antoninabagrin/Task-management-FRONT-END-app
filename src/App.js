@@ -18,17 +18,18 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
-    const jwtTokenDecoded = jwt_decode(token, { header: true });
-    const { exp } = jwt_decode(token);
-    const expirationTime = +exp;
 
-    token && token.length > 0 && dispatch(setIsAuth(true));
-
-    if (expirationTime > Date.now()) {
-      localStorage.removeItem('jwt');
-      dispatch(handleLogout());
-    } else {
+    if (token) {
+      const jwtTokenDecoded = jwt_decode(token, { header: true });
+      const { exp } = jwt_decode(token);
+      const expirationTime = +exp;
+      if (expirationTime > Date.now()) {
+        localStorage.removeItem('jwt');
+        dispatch(handleLogout());
+      }
       dispatch(handleLogin(token));
+    } else {
+      dispatch(setIsAuth(false));
     }
   }, [dispatch]);
 
@@ -51,5 +52,4 @@ function App() {
     </ThemeProvider>
   );
 }
-
 export default App;
