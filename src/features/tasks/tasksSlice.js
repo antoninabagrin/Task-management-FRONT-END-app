@@ -14,7 +14,7 @@ const tasksSlice = createSlice({
   name: 'tasks',
   initialState: {
     tasks: [],
-    loading: 'idle',
+    status: 'idle',
   },
   extraReducers(builder) {
     builder

@@ -10,7 +10,7 @@ import { RequireAuth } from './components/RequireAuth';
 import Dashboard from './pages/Dashboard';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { handleLogin, handleLogout, setIsAuth } from './features/userSlice';
+import { handleLogin, handleLogout } from './features/userSlice';
 import jwt_decode from 'jwt-decode';
 
 function App() {
@@ -20,16 +20,13 @@ function App() {
     const token = localStorage.getItem('jwt');
 
     if (token) {
-      const jwtTokenDecoded = jwt_decode(token, { header: true });
       const { exp } = jwt_decode(token);
-      const expirationTime = +exp;
-      if (expirationTime > Date.now()) {
+      if (exp > Date.now()) {
         localStorage.removeItem('jwt');
         dispatch(handleLogout());
+      } else {
+        dispatch(handleLogin(token));
       }
-      dispatch(handleLogin(token));
-    } else {
-      dispatch(setIsAuth(false));
     }
   }, [dispatch]);
 
