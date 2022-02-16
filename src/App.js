@@ -21,7 +21,7 @@ function App() {
 
     if (token) {
       const { exp } = jwt_decode(token);
-      if (exp > Date.now()) {
+      if (exp < Date.now()) {
         localStorage.removeItem('jwt');
         dispatch(handleLogout());
       } else {
