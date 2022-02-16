@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import {
+  Grid,
   Paper,
+  Table,
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,39 +22,36 @@ export default function Dashboard() {
   }, [dispatch]);
 
   return (
-    <TableContainer style={{ width: '100%' }} component={Paper}>
-      <TableRow
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-        }}
-      >
-        <TableCell sx={{ fontWeight: '700' }} align='center'>
-          Title
-        </TableCell>
-        <TableCell sx={{ fontWeight: '700' }} align='center'>
-          Description
-        </TableCell>
-        <TableCell sx={{ fontWeight: '700' }} align='center'>
-          Status
-        </TableCell>
-      </TableRow>
-      <TableBody
-        sx={{
-          display: 'grid',
-        }}
-      >
-        {tasks.tasks.map((task, index) => (
-          <TableRow
-            sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}
-            key={index}
-          >
-            <TableCell align='center'>{task.title}</TableCell>
-            <TableCell align='center'>{task.description}</TableCell>
-            <TableCell align='center'>{task.status}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </TableContainer>
+    <Grid container direction='row' justifyContent='center' alignItems='center'>
+      <Grid item xs={12} md={8} style={{ height: '100%' }}>
+        <TableContainer component={Paper} sx={{ marginTop: 5 }}>
+          <Table sx={{ minWidth: '580px' }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                  Title
+                </TableCell>
+                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                  Description
+                </TableCell>
+                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                  Status
+                </TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {tasks.tasks.map((task, index) => (
+                <TableRow key={index}>
+                  <TableCell align='center'>{task.title}</TableCell>
+                  <TableCell align='center'>{task.description}</TableCell>
+                  <TableCell align='center'>{task.status}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+    </Grid>
   );
 }
