@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import {
+  Grid,
   Paper,
   Table,
   TableBody,
@@ -21,28 +22,36 @@ export default function Dashboard() {
   }, [dispatch]);
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
-        <TableHead>
-          <TableRow>
-            <TableCell align='center'>Title</TableCell>
-            <TableCell align='center'>Description</TableCell>
-            <TableCell align='center'>Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tasks.tasks.map((task, index) => (
-            <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell align='center'>{task.title}</TableCell>
-              <TableCell align='center'>{task.description}</TableCell>
-              <TableCell align='center'>{task.status}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Grid container direction='row' justifyContent='center' alignItems='center'>
+      <Grid item xs={12} md={8} style={{ height: '100%' }}>
+        <TableContainer component={Paper} sx={{ marginTop: 5 }}>
+          <Table sx={{ minWidth: '580px' }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                  Title
+                </TableCell>
+                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                  Description
+                </TableCell>
+                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                  Status
+                </TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {tasks.tasks.map((task, index) => (
+                <TableRow key={index}>
+                  <TableCell align='center'>{task.title}</TableCell>
+                  <TableCell align='center'>{task.description}</TableCell>
+                  <TableCell align='center'>{task.status}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+    </Grid>
   );
 }
