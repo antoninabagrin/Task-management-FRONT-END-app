@@ -2,12 +2,11 @@ import * as React from 'react';
 import {
   Button,
   Dialog,
-  Typography,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider
+  Divider,
 } from '@mui/material';
 
 import { useDispatch } from 'react-redux';

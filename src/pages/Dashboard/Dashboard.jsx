@@ -15,6 +15,7 @@ import AlertDialog from './DeleteTaskDialog';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasks, selectTasks } from '../../features/tasks/tasksSlice';
+import AddTask from './AddTask';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -42,7 +43,6 @@ export default function Dashboard() {
       />
 
       <Grid item xs={12} md={8} style={{ height: '100%' }}>
-        
         <TableContainer component={Paper} sx={{ marginTop: 5 }}>
           <Table sx={{ minWidth: '580px' }}>
             <TableHead>
@@ -79,6 +79,7 @@ export default function Dashboard() {
             </TableBody>
           </Table>
         </TableContainer>
+        <AddTask></AddTask>
       </Grid>
     </Grid>
   );
