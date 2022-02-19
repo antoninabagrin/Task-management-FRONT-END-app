@@ -11,11 +11,12 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasks, selectTasks } from '../features/tasks/tasksSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-
   const tasks = useSelector(selectTasks);
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getTasks());
@@ -29,13 +30,13 @@ export default function Dashboard() {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontWeight: '700' }} align='center'>
-                  Title
+                  {t('Title')}
                 </TableCell>
                 <TableCell sx={{ fontWeight: '700' }} align='center'>
-                  Description
+                  {t('Description')}
                 </TableCell>
                 <TableCell sx={{ fontWeight: '700' }} align='center'>
-                  Status
+                  {t('Status')}
                 </TableCell>
               </TableRow>
             </TableHead>

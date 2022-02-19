@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 import { useDispatch } from 'react-redux';
 import { handleLogin, setIsAuth } from '../features/userSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function SignIn() {
   const [username, setUsername] = useState();
@@ -21,6 +22,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const from = location.state?.from?.pathname || '/protected';
 
@@ -56,7 +58,7 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Sign in
+          {t('Sign in')}
         </Typography>
         <Box component='form' onSubmit={handleSubmit}>
           <TextField
@@ -64,7 +66,7 @@ export default function SignIn() {
             required
             fullWidth
             id='username'
-            label='Username'
+            label={t('Username')}
             name='username'
             autoComplete='username'
             autoFocus
@@ -75,7 +77,7 @@ export default function SignIn() {
             required
             fullWidth
             name='password'
-            label='Password'
+            label={t('Password')}
             type='password'
             id='password'
             autoComplete='current-password'
@@ -83,7 +85,7 @@ export default function SignIn() {
           />
           <FormControlLabel
             control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
+            label={t('Remember me')}
           />
           <Button
             type='submit'
@@ -91,17 +93,17 @@ export default function SignIn() {
             variant='contained'
             onClick={handleLogin}
           >
-            Sign In
+            {t('Sign In')}
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href='#' variant='body2'>
-                Forgot password?
+                {t('Forgot password?')}
               </Link>
             </Grid>
             <Grid item>
               <Link href='/signup' variant='body2'>
-                {"Don't have an account? Sign Up"}
+                {t("Don't have an account? Sign Up")}
               </Link>
             </Grid>
           </Grid>

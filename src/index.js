@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { CssBaseline } from '@mui/material';
 import { Provider } from 'react-redux';
 import store from './store';
+import './utils/languages/i18n';
 
 ReactDOM.render(
   <React.StrictMode>
