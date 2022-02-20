@@ -9,6 +9,7 @@ import {
   TableHead,
   TableRow,
   IconButton,
+  TablePagination,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AlertDialog from './DeleteTaskDialog';
@@ -21,6 +22,8 @@ export default function Dashboard() {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [selectedTaskId, setSelectedTaskId] = React.useState(null);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const tasks = useSelector(selectTasks);
   const headerWeight = { fontWeight: '700' };
@@ -34,6 +37,14 @@ export default function Dashboard() {
     setOpen(true);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(event.target.value);
+    setPage(0);
+  };
   return (
     <Grid container direction='row' justifyContent='center' alignItems='center'>
       <AlertDialog
@@ -61,24 +72,35 @@ export default function Dashboard() {
             </TableHead>
 
             <TableBody>
-              {tasks.tasks.map((task, index) => (
-                <TableRow key={index}>
-                  <TableCell align='center'>{task.title}</TableCell>
-                  <TableCell align='center'>{task.description}</TableCell>
-                  <TableCell align='center'>{task.status}</TableCell>
-                  <TableCell align='center'>
-                    <IconButton
-                      size='large'
-                      onClick={() => handleDeleteTask(task.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {tasks.tasks
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((task, index) => (
+                  <TableRow key={index}>
+                    <TableCell align='center'>{task.title}</TableCell>
+                    <TableCell align='center'>{task.description}</TableCell>
+                    <TableCell align='center'>{task.status}</TableCell>
+                    <TableCell align='center'>
+                      <IconButton
+                        size='large'
+                        onClick={() => handleDeleteTask(task.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          component='div'
+          count={tasks.tasks.length}
+          onPageChange={handleChangePage}
+          page={page}
+          rowsPerPageOptions={[10, 25, 50]}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
         <AddTask></AddTask>
       </Grid>
     </Grid>
