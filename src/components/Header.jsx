@@ -81,7 +81,7 @@ export default function Header() {
           )}
           <Box>
             <IconButton onClick={handleOpenLanguageMenu}>
-              <LanguageIcon></LanguageIcon>
+              <LanguageIcon style={{ color: 'white' }}></LanguageIcon>
             </IconButton>
             <Menu
               anchorEl={languageMenu}

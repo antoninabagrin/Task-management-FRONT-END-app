@@ -1,10 +1,10 @@
 {
   "News": "News",
   "Sign in": "Sign in",
-  "SIGN IN": "SIGN IN",
-  "DASHBOARD": "DASHBOARD",
+  "Sign In": "Sign In",
   "SIGN OUT": "SIGN OUT",
   "Sign up": "Sign up",
+  "Dashboard": "Dashboard",
   "English": "English",
   "Romanian": "Romanian",
   "UserName": "Username",
@@ -17,7 +17,7 @@
   "Email Address": "Email Adress",
   "I accept the terms and conditions.": "I accept the terms and conditions",
   "Join": "Join",
-  "Already have an account? Sign in!t": "Already have an account? Sign in",
+  "Already have an account? Sign in!": "Already have an account? Sign in",
   "Title": "Title",
   "Description": "Description",
   "Status": "Status"
