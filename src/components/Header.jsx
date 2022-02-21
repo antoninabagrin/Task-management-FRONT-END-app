@@ -12,7 +12,7 @@ import { Menu, MenuItem } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setIsAuth } from '../features/userSlice';
-import { languages } from '../utils/languages/languagesData';
+import languages from '../utils/languages/languagesData';
 import { useTranslation } from 'react-i18next';
 
 export default function Header() {

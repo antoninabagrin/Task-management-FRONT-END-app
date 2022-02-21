@@ -1,4 +1,4 @@
-export const languages = [
+const languages = [
   {
     id: 1,
     name: 'English',
@@ -10,3 +10,5 @@ export const languages = [
     language: 'ro',
   },
 ];
+
+export default languages;
