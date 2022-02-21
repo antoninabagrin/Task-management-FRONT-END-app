@@ -12,16 +12,16 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AlertDialog from './DeleteTaskDialog';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasks, selectTasks } from '../../features/tasks/tasksSlice';
+import { useTranslation } from 'react-i18next';
 import AddTask from './AddTask';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [selectedTaskId, setSelectedTaskId] = React.useState(null);
-
+  const { t } = useTranslation();
   const tasks = useSelector(selectTasks);
   const headerWeight = { fontWeight: '700' };
 
@@ -48,13 +48,13 @@ export default function Dashboard() {
             <TableHead>
               <TableRow>
                 <TableCell sx={headerWeight} align='center'>
-                  Title
+                  {t('Title')}
                 </TableCell>
                 <TableCell sx={headerWeight} align='center'>
-                  Description
+                  {t('Description')}
                 </TableCell>
                 <TableCell sx={headerWeight} align='center'>
-                  Status
+                  {t('Status')}
                 </TableCell>
                 <TableCell></TableCell>
               </TableRow>
