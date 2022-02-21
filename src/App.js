@@ -7,7 +7,7 @@ import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import Header from './components/Header';
 import { RequireAuth } from './components/RequireAuth';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { handleLogin, handleLogout } from './features/userSlice';
@@ -21,7 +21,7 @@ function App() {
 
     if (token) {
       const { exp } = jwt_decode(token);
-      if (exp < Date.now()) {
+      if (exp*1000 < Date.now()) {
         localStorage.removeItem('jwt');
         dispatch(handleLogout());
       } else {

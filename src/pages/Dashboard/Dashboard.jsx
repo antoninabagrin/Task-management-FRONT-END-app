@@ -8,36 +8,55 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  IconButton,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AlertDialog from './DeleteTaskDialog';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTasks, selectTasks } from '../features/tasks/tasksSlice';
+import { getTasks, selectTasks } from '../../features/tasks/tasksSlice';
 import { useTranslation } from 'react-i18next';
+import AddTask from './AddTask';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const tasks = useSelector(selectTasks);
+  const [open, setOpen] = React.useState(false);
+  const [selectedTaskId, setSelectedTaskId] = React.useState(null);
   const { t } = useTranslation();
+  const tasks = useSelector(selectTasks);
+  const headerWeight = { fontWeight: '700' };
 
   useEffect(() => {
     dispatch(getTasks());
   }, [dispatch]);
 
+  const handleDeleteTask = async (taskId) => {
+    setSelectedTaskId(taskId);
+    setOpen(true);
+  };
+
   return (
     <Grid container direction='row' justifyContent='center' alignItems='center'>
+      <AlertDialog
+        open={open}
+        setOpen={setOpen}
+        selectedTaskId={selectedTaskId}
+      />
+
       <Grid item xs={12} md={8} style={{ height: '100%' }}>
         <TableContainer component={Paper} sx={{ marginTop: 5 }}>
           <Table sx={{ minWidth: '580px' }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                <TableCell sx={headerWeight} align='center'>
                   {t('Title')}
                 </TableCell>
-                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                <TableCell sx={headerWeight} align='center'>
                   {t('Description')}
                 </TableCell>
-                <TableCell sx={{ fontWeight: '700' }} align='center'>
+                <TableCell sx={headerWeight} align='center'>
                   {t('Status')}
                 </TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
 
@@ -47,11 +66,20 @@ export default function Dashboard() {
                   <TableCell align='center'>{task.title}</TableCell>
                   <TableCell align='center'>{task.description}</TableCell>
                   <TableCell align='center'>{task.status}</TableCell>
+                  <TableCell align='center'>
+                    <IconButton
+                      size='large'
+                      onClick={() => handleDeleteTask(task.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <AddTask></AddTask>
       </Grid>
     </Grid>
   );
