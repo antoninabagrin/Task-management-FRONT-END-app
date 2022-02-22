@@ -4,22 +4,17 @@ import axios from '../../utils/axios';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { getTasks } from '../../features/tasks/getTasksSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function AddTask() {
   const [title, setTitle] = React.useState('');
   const [description, setDescription] = React.useState('');
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-
-    //   const allData = {
-    //     title: data.get('title'),
-    //     description: data.get('description'),
-    //     status: 'OPEN',
-    //   };
-    //   console.log('allData', allData);
   };
 
   const handleTitleChange = (event) => {
@@ -51,7 +46,7 @@ export default function AddTask() {
           margin='normal'
           required
           fullWidth
-          label='Title'
+          label={t('Title')}
           id='title'
           value={title}
           onChange={handleTitleChange}
@@ -60,13 +55,13 @@ export default function AddTask() {
           margin='normal'
           required
           fullWidth
-          label='Description'
+          label={t('Description')}
           id='description'
           value={description}
           onChange={handleDecriptionChange}
         />
         <Button onClick={() => handleAddTask()} variant='outlined'>
-          Add a task
+          {t('Add a task')}
         </Button>
       </Box>
     </Box>

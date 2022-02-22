@@ -12,9 +12,11 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
+import { useTranslation } from 'react-i18next';
 
 export function SignUp() {
   const history = useNavigate();
+  const { t } = useTranslation();
   const res = (allData) => {
     axios
       .post('/auth/signup', {
@@ -43,7 +45,7 @@ export function SignUp() {
       lastName: data.get('lastName'),
       firstName: data.get('firstName'),
       password: data.get('password'),
-      passwordConform: data.get('passwordConfirm'),
+      confirmPassword: data.get('confirmPassword'),
       username: data.get('username'),
     };
     if (
@@ -51,16 +53,16 @@ export function SignUp() {
       allData.firstName &&
       allData.lastName &&
       allData.password &&
-      allData.passwordConform &&
+      allData.confirmPassword &&
       allData.username
     ) {
-      if (allData.password === allData.passwordConform) {
+      if (allData.password === allData.confirmPassword) {
         res(allData);
       } else {
-        alert('Password and confirm password doesnt match');
+        alert(t("Password and confirm password doesn't match"));
       }
     } else {
-      alert('You should fill every field ');
+      alert(t('You should fill every field '));
     }
   };
 
@@ -76,7 +78,7 @@ export function SignUp() {
       >
         <Avatar></Avatar>
         <Typography component='h1' variant='h5' margin='5'>
-          Sign up
+          {t('Sign up')}
         </Typography>
         <Box component='form' onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -87,7 +89,7 @@ export function SignUp() {
                 required
                 fullWidth
                 id='firstName'
-                label='First Name'
+                label={t('First Name')}
                 autoFocus
               />
             </Grid>
@@ -96,7 +98,7 @@ export function SignUp() {
                 required
                 fullWidth
                 id='lastName'
-                label='Last Name'
+                label={t('Last Name')}
                 name='lastName'
                 autoComplete='family-name'
               />
@@ -106,7 +108,7 @@ export function SignUp() {
                 required
                 fullWidth
                 id='email'
-                label='Email Address'
+                label={t('Email Address')}
                 name='email'
                 autoComplete='email'
               />
@@ -116,25 +118,36 @@ export function SignUp() {
                 required
                 fullWidth
                 name='password'
-                label='Password'
+                label={t('Password')}
                 type='password'
                 id='password'
                 autoComplete='new-password'
               />
             </Grid>
             <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name='confirmPassword'
+                label={t('Confirm password')}
+                type='confirmPassword'
+                id='confirmPassword'
+                autoComplete='confirm-password'
+              />
+            </Grid>
+            <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value='term' color='primary' />}
-                label=' I accept the terms and conditions.'
+                label={t('I accept the terms and conditions.')}
               />
             </Grid>
           </Grid>
           <Button type='submit' fullWidth variant='contained'>
-            Join
+            {t('Join')}
           </Button>
           <Grid container justifyContent='flex-end'>
             <Link href='/signin' variant='body2'>
-              <Grid item>Already have an account? Sign in</Grid>
+              <Grid item>{t('Already have an account? Sign in!')}</Grid>
             </Link>
           </Grid>
         </Box>
