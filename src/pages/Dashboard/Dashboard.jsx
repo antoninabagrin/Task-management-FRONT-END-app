@@ -101,7 +101,7 @@ export default function Dashboard() {
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-        <AddTask></AddTask>
+        <AddTask />
       </Grid>
     </Grid>
   );
