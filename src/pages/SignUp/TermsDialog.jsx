@@ -8,14 +8,13 @@ import {
   DialogTitle,
   Divider,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-export default function TermsDialog({ open, setOpen }) {
-  const handleSubmit = () => {
-    setOpen(false);
-  };
+export default function TermsDialog({ open, setOpen, setIsAgree }) {
+  const { t } = useTranslation();
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Terms and Conditions</DialogTitle>
+      <DialogTitle>{t('Terms and Conditions</DialogTitle')}/</DialogTitle>
       <Divider />
       <DialogContent>
         <DialogContentText>
@@ -25,13 +24,17 @@ export default function TermsDialog({ open, setOpen }) {
           nesciunt ipsam iusto sequi.
         </DialogContentText>
       </DialogContent>
-
       <Divider />
-
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
-        <Button onClick={() => handleSubmit()} autoFocus>
-          Agree
+        <Button onClick={() => setOpen(false)}>{t('Cancel')}</Button>
+        <Button
+          onClick={() => {
+            setIsAgree(true);
+            setOpen(false);
+          }}
+          autoFocus
+        >
+          {t(' Agree')}
         </Button>
       </DialogActions>
     </Dialog>

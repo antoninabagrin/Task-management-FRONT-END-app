@@ -16,11 +16,18 @@
   "First Name": "Nume",
   "Last Name": "Prenume",
   "Email Address": "Adresa de email",
-  "I accept the terms and conditions.": "Accept termenii si conditiile",
+  "I accept the terms and conditions.": "Accepta termenii si conditiile",
   "Join": "Alatura-te",
   "Already have an account? Sign in!": "Ai deja un cont? Conecteaza!",
   "Title": "Titlu",
   "Description": "Descriere",
   "Status": "Status",
-  "Add a task": "Adauga un task"
+  "Add a task": "Adauga un task",
+  "Terms and Conditions": "Termeni si conditii",
+  "Cancel": "Anuleaza",
+  "Agree": "Accepta",
+  "Invalid email": "Email invalid",
+  "Required": "Trebuie completat",
+  "Must be 10 characters or less": "Trebuie sa contina 10 sau mai multe caractere",
+  "Passwords must match": "Parolele trebuie sa fie identice"
 }

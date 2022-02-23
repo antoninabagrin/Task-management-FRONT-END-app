@@ -21,5 +21,12 @@
   "Title": "Title",
   "Description": "Description",
   "Status": "Status",
-  "Add a task": "Add a task"
+  "Add a task": "Add a task",
+  "Terms and Conditions": "Terms and Conditions",
+  "Cancel": "Cancel",
+  "Agree": "Agree",
+  "Invalid email": "Invalid email",
+  "Required": "Required",
+  "Must be 10 characters or less": "Must be 10 characters or less",
+  "Passwords must match": "Passwords must match"
 }

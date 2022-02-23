@@ -16,9 +16,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export default function SignUp() {
   const [open, setOpen] = React.useState(false);
+  const [isAgree, setIsAgree] = React.useState(false);
+  const { t } = useTranslation();
   const history = useNavigate();
   const errorStyle = { color: 'red' };
 
@@ -30,24 +33,20 @@ export default function SignUp() {
       confirmPassword: '',
       acceptTerms: false,
     },
-    validationSchema: Yup.object().shape({
-      email: Yup.string().required('Required'),
+    validationSchema: Yup.object({
+      email: Yup.string().email(t('Invalid email')).required(t('Required')),
       username: Yup.string()
-        .max(10, 'Must be 10 characters or less')
-        .required('Required'),
-      password: Yup.string().required('Password is required'),
-      passwordConfirmation: Yup.string().oneOf(
+        .max(10, t('Must be 10 characters or less'))
+        .required(t('Required')),
+      password: Yup.string().required(t('Password is required')),
+      confirmPassword: Yup.string().oneOf(
         [Yup.ref('password'), null],
-        'Passwords must match',
-      ),
-      acceptTerms: Yup.bool().oneOf(
-        [true],
-        'You have to agree with our Terms and Conditions!',
+        t('Passwords must match'),
       ),
     }),
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       console.log('values', values);
-      await axios
+      axios
         .post('/auth/signup', {
           email: values.email,
           password: values.password,
@@ -65,13 +64,13 @@ export default function SignUp() {
     },
   });
 
-  const handleDialog = () => {
-    setOpen(true);
+  const checkDisableJoinButton = () => {
+    return !isAgree;
   };
 
   return (
     <Grid container direction='row' justifyContent='center' alignItems='center'>
-      <TermsDialog open={open} setOpen={setOpen} />
+      <TermsDialog open={open} setOpen={setOpen} setIsAgree={setIsAgree} />
       <Container maxWidth='sm'>
         <Box
           sx={{
@@ -83,15 +82,14 @@ export default function SignUp() {
         >
           <Avatar />
           <Typography component='h1' variant='h5'>
-            Sign up
+            {t('Sign up')}
           </Typography>
           <Box component='form' onSubmit={formik.handleSubmit}>
             <TextField
               margin='normal'
-              required
               fullWidth
               autoFocus
-              label='Email Address'
+              label={t('Email Address')}
               id='email'
               name='email'
               onChange={formik.handleChange}
@@ -102,10 +100,9 @@ export default function SignUp() {
             ) : null}
             <TextField
               margin='normal'
-              required
               fullWidth
               autoFocus
-              label='Username'
+              label={t('Username')}
               id='username'
               name='username'
               onChange={formik.handleChange}
@@ -116,10 +113,9 @@ export default function SignUp() {
             ) : null}
             <TextField
               margin='normal'
-              required
               fullWidth
               autoFocus
-              label='Password'
+              label={t('Password')}
               id='password'
               type='password'
               name='password'
@@ -131,10 +127,9 @@ export default function SignUp() {
             ) : null}
             <TextField
               margin='normal'
-              required
               fullWidth
               autoFocus
-              label='Confirm password'
+              label={t('Confirm password')}
               id='confirmPassword'
               type='password'
               name='confirmPassword'
@@ -147,23 +142,29 @@ export default function SignUp() {
             <FormControlLabel
               control={
                 <Checkbox
-                  onClick={() => handleDialog()}
+                  onClick={() => setOpen(true)}
                   value='term'
                   color='primary'
                 />
               }
-              label=' I accept the terms and conditions.'
+              label={t('I accept the terms and conditions.')}
             />
             {formik.touched.acceptTerms && formik.errors.acceptTerms ? (
               <div style={errorStyle}>{formik.errors.acceptTerms}</div>
             ) : null}
 
-            <Button type='submit' fullWidth variant='contained'>
-              Join
+            <Button
+              type='submit'
+              fullWidth
+              variant='contained'
+              disabled={checkDisableJoinButton()}
+            >
+              {t('Join')}
             </Button>
+
             <Grid container justifyContent={'flex-end'}>
               <Link href='/signin' variant='body2'>
-                Already have an account? Sign in
+                {t('Already have an account? Sign in!')}
               </Link>
             </Grid>
           </Box>
