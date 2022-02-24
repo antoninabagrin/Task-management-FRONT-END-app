@@ -15,15 +15,18 @@ import axios from '../../utils/axios';
 
 export default function AlertDialog({ open, setOpen, selectedTaskId }) {
   const dispatch = useDispatch();
+  const [deleted, setDeleted] = React.useState(false);
 
   const deleteTask = async () => {
     await axios.delete(`/tasks/${selectedTaskId}`);
+
     dispatch(getTasks());
     setOpen(false);
+    setDeleted(toString(true));
   };
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={open} onClose={() => setOpen(false)} deleted={deleted}>
       <DialogTitle>Delete task</DialogTitle>
       <Divider />
       <DialogContent>
