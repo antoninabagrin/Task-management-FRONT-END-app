@@ -7,22 +7,41 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  IconButton,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileSaver from 'file-saver';
 
 export default function TermsDialog({ open, setOpen, setIsAgree }) {
   const { t } = useTranslation();
+
+  const handleDownload = (event) => {
+    event.preventDefault();
+    const terms = new Blob(
+      [
+        t(
+          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit quocorporis cupiditate voluptates sapiente exercitationem doloremque quibusdam assumenda iste! Id fuga earum saepe eligendi labore maiores nesciunt ipsam iusto sequi.',
+        ),
+      ],
+      { type: 'text/plain;charset=utf-8' },
+    );
+    FileSaver.saveAs(terms, 'Terms.txt');
+  };
+
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>{t('Terms and Conditions</DialogTitle')}/</DialogTitle>
+      <DialogTitle>{t('Terms and Conditions')}</DialogTitle>
       <Divider />
       <DialogContent>
         <DialogContentText>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit quo
-          corporis cupiditate voluptates sapiente exercitationem doloremque
-          quibusdam assumenda iste! Id fuga earum saepe eligendi labore maiores
-          nesciunt ipsam iusto sequi.
+          {t(
+            'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit quocorporis cupiditate voluptates sapiente exercitationem doloremque quibusdam assumenda iste! Id fuga earum saepe eligendi labore maiores nesciunt ipsam iusto sequi.',
+          )}
         </DialogContentText>
+        <IconButton onClick={handleDownload}>
+          <FileDownloadIcon></FileDownloadIcon>
+        </IconButton>
       </DialogContent>
       <Divider />
       <DialogActions>
@@ -34,7 +53,7 @@ export default function TermsDialog({ open, setOpen, setIsAgree }) {
           }}
           autoFocus
         >
-          {t(' Agree')}
+          {t('Agree')}
         </Button>
       </DialogActions>
     </Dialog>
