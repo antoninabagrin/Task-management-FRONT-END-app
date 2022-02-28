@@ -20,7 +20,6 @@ import { useTranslation } from 'react-i18next';
 
 export default function SignUp() {
   const [open, setOpen] = React.useState(false);
-  const [isAgree, setIsAgree] = React.useState(false);
   const { t } = useTranslation();
   const history = useNavigate();
   const errorStyle = { color: 'red' };
@@ -65,12 +64,16 @@ export default function SignUp() {
   });
 
   const checkDisableJoinButton = () => {
-    return !isAgree;
+    return !formik.values.acceptTerms;
   };
 
   return (
     <Grid container direction='row' justifyContent='center' alignItems='center'>
-      <TermsDialog open={open} setOpen={setOpen} setIsAgree={setIsAgree} />
+      <TermsDialog
+        open={open}
+        setOpen={setOpen}
+        setFieldValue={formik.setFieldValue}
+      />
       <Container maxWidth='sm'>
         <Box
           sx={{
@@ -95,9 +98,9 @@ export default function SignUp() {
               onChange={formik.handleChange}
               value={formik.values.email}
             />
-            {formik.touched.email && formik.errors.email ? (
+            {formik.touched.email && formik.errors.email && (
               <div style={errorStyle}>{formik.errors.email}</div>
-            ) : null}
+            )}
             <TextField
               margin='normal'
               fullWidth
@@ -108,9 +111,9 @@ export default function SignUp() {
               onChange={formik.handleChange}
               value={formik.values.username}
             />
-            {formik.touched.username && formik.errors.username ? (
+            {formik.touched.username && formik.errors.username && (
               <div style={errorStyle}>{formik.errors.username}</div>
-            ) : null}
+            )}
             <TextField
               margin='normal'
               fullWidth
@@ -122,9 +125,9 @@ export default function SignUp() {
               onChange={formik.handleChange}
               value={formik.values.password}
             />
-            {formik.touched.password && formik.errors.password ? (
+            {formik.touched.password && formik.errors.password && (
               <div style={errorStyle}>{formik.errors.password}</div>
-            ) : null}
+            )}
             <TextField
               margin='normal'
               fullWidth
@@ -136,22 +139,24 @@ export default function SignUp() {
               onChange={formik.handleChange}
               value={formik.values.confirmPassword}
             />
-            {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-              <div style={errorStyle}>{formik.errors.confirmPassword}</div>
-            ) : null}
+            {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword && (
+                <div style={errorStyle}>{formik.errors.confirmPassword}</div>
+              )}
             <FormControlLabel
               control={
                 <Checkbox
                   onClick={() => setOpen(true)}
                   value='term'
                   color='primary'
+                  checked={formik.values.acceptTerms}
                 />
               }
               label={t('I accept the terms and conditions.')}
             />
-            {formik.touched.acceptTerms && formik.errors.acceptTerms ? (
+            {formik.touched.acceptTerms && formik.errors.acceptTerms && (
               <div style={errorStyle}>{formik.errors.acceptTerms}</div>
-            ) : null}
+            )}
 
             <Button
               type='submit'
