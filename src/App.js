@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import { SignUp } from './pages/SignUp';
 import { ThemeProvider } from '@mui/material';
 import { theme } from './Theme';
 import SignIn from './pages/SignIn';
@@ -12,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { handleLogin, handleLogout } from './features/userSlice';
 import jwt_decode from 'jwt-decode';
+import SignUp from './pages/SignUp/SignUp';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ function App() {
 
     if (token) {
       const { exp } = jwt_decode(token);
-      if (exp*1000 < Date.now()) {
+      if (exp * 1000 < Date.now()) {
         localStorage.removeItem('jwt');
         dispatch(handleLogout());
       } else {
