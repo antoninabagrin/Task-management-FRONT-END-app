@@ -8,7 +8,6 @@ import {
   DialogTitle,
   Divider,
 } from '@mui/material';
-
 import { useDispatch } from 'react-redux';
 import { getTasks } from '../../features/tasks/tasksSlice';
 import axios from '../../utils/axios';
@@ -24,7 +23,8 @@ export default function AlertDialog({ open, setOpen, selectedTaskId }) {
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle>Delete task</DialogTitle>
+      <DialogTitle item>Delete task</DialogTitle>
+
       <Divider />
       <DialogContent>
         <DialogContentText>
