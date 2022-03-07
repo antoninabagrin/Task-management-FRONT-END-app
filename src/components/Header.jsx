@@ -33,10 +33,7 @@ export default function Header() {
   };
 
   const handleCloseLanguageMenu = (language) => {
-    if (language === 'en' || language === 'ro') {
-      i18n.changeLanguage(language);
-      setLanguageMenu(false);
-    }
+    i18n.changeLanguage(language);
     setLanguageMenu(false);
   };
 
@@ -91,6 +88,7 @@ export default function Header() {
               {languages.map((languages) => (
                 <MenuItem
                   key={languages.id}
+                  disabled={i18n.language === languages.language ? true : false}
                   onClick={() => handleCloseLanguageMenu(languages.language)}
                 >
                   <Typography textAlign='center'>
