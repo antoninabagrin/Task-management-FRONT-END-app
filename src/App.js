@@ -9,9 +9,10 @@ import { RequireAuth } from './components/RequireAuth';
 import Dashboard from './pages/Dashboard/Dashboard';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { handleLogin, handleLogout } from './features/userSlice';
+import { handleLogin, handleLogout } from './features/user/userSlice';
 import jwt_decode from 'jwt-decode';
 import SignUp from './pages/SignUp/SignUp';
+import UserSettings from './pages/UserSettings';
 
 function App() {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route path='usersettings' element={<UserSettings />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
       </Routes>

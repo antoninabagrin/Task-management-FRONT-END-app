@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 import { useDispatch } from 'react-redux';
-import { handleLogin, setIsAuth } from '../features/userSlice';
+import { handleLogin, setIsAuth } from '../features/user/userSlice';
 import { useTranslation } from 'react-i18next';
 
 export default function SignIn() {

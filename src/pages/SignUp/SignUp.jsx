@@ -44,7 +44,6 @@ export default function SignUp() {
       ),
     }),
     onSubmit: (values) => {
-      console.log('values', values);
       axios
         .post('/auth/signup', {
           email: values.email,
