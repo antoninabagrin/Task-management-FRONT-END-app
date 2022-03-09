@@ -13,7 +13,7 @@ export const getUserDetails = createAsyncThunk(
 const userDetailsSlice = createSlice({
   name: 'userDetails',
   initialState: {
-    userDetails: [],
+    data: {},
     status: 'idle',
   },
   extraReducers(builder) {
@@ -22,7 +22,7 @@ const userDetailsSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(getUserDetails.fulfilled, (state, action) => {
-        state.userDetails = action.payload;
+        state.data = action.payload;
         state.status = 'success';
       })
       .addCase(getUserDetails.rejected, (state, _action) => {

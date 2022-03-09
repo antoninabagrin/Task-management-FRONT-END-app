@@ -1,64 +1,117 @@
-import {
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
+import axios from 'axios';
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getUserDetails,
   selectUserDetails,
 } from '../features/user/userDetailsSlice';
+import { Box } from '@mui/system';
 
 export default function UserSettings() {
   const dispatch = useDispatch();
-  const userDetails = useSelector(selectUserDetails);
-  const { t } = useTranslation();
-  const headerWeight = { fontWeight: '700' };
+  const { location, number, telephone, address } =
+    useSelector(selectUserDetails).data;
+  const [locationChange, setLocationChange] = useState(location);
+  const [numberChange, setNumberChange] = useState(number);
+  const [telephoneChange, setTelephoneChange] = useState(telephone);
+  const [addressChange, setAddressChange] = useState(address);
 
   useEffect(() => {
     dispatch(getUserDetails());
-    console.log(userDetails, 'details');
   }, [dispatch]);
 
-  return (
-    <Grid item xs={12} md={8} style={{ height: '100%' }}>
-      <TableContainer component={Paper} sx={{ marginTop: 5 }}>
-        <Table sx={{ minWidth: '580px' }}>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={headerWeight} align='center'>
-                {t('Location')}
-              </TableCell>
-              <TableCell sx={headerWeight} align='center'>
-                {t('Number')}
-              </TableCell>
-              <TableCell sx={headerWeight} align='center'>
-                {t('Telephone')}
-              </TableCell>
-              <TableCell sx={headerWeight} align='center'>
-                {t('Address')}
-              </TableCell>
-            </TableRow>
-          </TableHead>
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
 
-          <TableBody>
-            {userDetails.userDetails.id}
-            <TableRow>
-              <TableCell align='center'>{userDetails.location}</TableCell>
-              <TableCell align='center'>{userDetails.number}</TableCell>
-              <TableCell align='center'>{userDetails.telephone}</TableCell>
-              <TableCell align='center'>{userDetails.address}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+  const handleLocationChange = (event) => {
+    setLocationChange(event.target.value);
+  };
+
+  const handleTelephoneChange = (event) => {
+    setTelephoneChange(event.target.value);
+  };
+
+  const handleNumberChange = (event) => {
+    setNumberChange(event.target.value);
+  };
+
+  const handleAddressChange = (event) => {
+    setAddressChange(event.target.value);
+  };
+
+  const handleChanges = async () => {
+    if (locationChange || numberChange || telephoneChange || addressChange) {
+      await axios.post(`/user-details/create-details`, {
+        location,
+        number,
+        telephone,
+        address,
+      });
+      dispatch(getUserDetails());
+    }
+  };
+
+  return (
+    <Grid container>
+      <Box
+        component='form'
+        noValidate
+        onSubmit={handleSubmit}
+        sx={{
+          margin: 5,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <TextField
+          margin='normal'
+          label='Location'
+          type='text'
+          value={locationChange}
+          autoFocus
+          InputLabelProps={{ shrink: true }}
+          onChange={handleLocationChange}
+        ></TextField>
+        <TextField
+          margin='normal'
+          label='Number'
+          type='text'
+          value={numberChange}
+          autoFocus
+          InputLabelProps={{ shrink: true }}
+          onChange={handleNumberChange}
+        ></TextField>
+        <TextField
+          margin='normal'
+          label='Telephone'
+          type='text'
+          value={telephoneChange}
+          autoFocus
+          InputLabelProps={{ shrink: true }}
+          onChange={handleTelephoneChange}
+        ></TextField>
+        <TextField
+          margin='normal'
+          id='address'
+          label='Address'
+          type='text'
+          value={addressChange}
+          autoFocus
+          InputLabelProps={{ shrink: true }}
+          onChange={handleAddressChange}
+        ></TextField>
+        <Button
+          variant='contained'
+          onClick={() => handleChanges()}
+          type='submit'
+        >
+          Save changes!
+        </Button>
+      </Box>
     </Grid>
   );
 }
