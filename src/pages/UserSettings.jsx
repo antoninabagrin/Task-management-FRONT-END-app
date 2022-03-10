@@ -42,14 +42,19 @@ export default function UserSettings() {
     setAddressChange(event.target.value);
   };
 
-  const handleChanges = async () => {
+  // http://localhost:3000/user-details/create-details/user/b573fc80-2406-4b2e-9bc0-6a6010c9f185
+
+  const updateUserDetails = async () => {
     if (locationChange || numberChange || telephoneChange || addressChange) {
-      await axios.post(`/user-details/create-details`, {
-        location,
-        number,
-        telephone,
-        address,
-      });
+      await axios.post(
+        '/user-details/create-details/user/b573fc80-2406-4b2e-9bc0-6a6010c9f185',
+        {
+          location,
+          number,
+          telephone,
+          address,
+        },
+      );
       dispatch(getUserDetails());
     }
   };
@@ -106,7 +111,7 @@ export default function UserSettings() {
         ></TextField>
         <Button
           variant='contained'
-          onClick={() => handleChanges()}
+          onClick={() => updateUserDetails()}
           type='submit'
         >
           Save changes!
