@@ -1,30 +1,36 @@
 import { Button, Grid, TextField } from '@mui/material';
-import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
+import axios from '../utils/axios';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getUserDetails,
-  selectUserDetails,
+  selectUserDetailsData,
+  selectUserDetailsStatus,
 } from '../features/user/userDetailsSlice';
-import { Box } from '@mui/system';
 
 export default function UserSettings() {
   const dispatch = useDispatch();
-  const { location, number, telephone, address } =
-    useSelector(selectUserDetails).data;
-  const [locationChange, setLocationChange] = useState(location);
-  const [numberChange, setNumberChange] = useState(number);
-  const [telephoneChange, setTelephoneChange] = useState(telephone);
-  const [addressChange, setAddressChange] = useState(address);
+  const { location, number, telephone, address } = useSelector(
+    selectUserDetailsData,
+  );
+  const status = useSelector(selectUserDetailsStatus);
+  const [locationChange, setLocationChange] = useState();
+  const [numberChange, setNumberChange] = useState();
+  const [telephoneChange, setTelephoneChange] = useState();
+  const [addressChange, setAddressChange] = useState();
 
   useEffect(() => {
     dispatch(getUserDetails());
   }, [dispatch]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
+  useEffect(() => {
+    setLocationChange(location);
+    setNumberChange(number);
+    setTelephoneChange(telephone.toString());
+    setAddressChange(address);
+  }, [number, location, telephone, address]);
 
   const handleLocationChange = (event) => {
     setLocationChange(event.target.value);
@@ -42,81 +48,98 @@ export default function UserSettings() {
     setAddressChange(event.target.value);
   };
 
-  // http://localhost:3000/user-details/create-details/user/b573fc80-2406-4b2e-9bc0-6a6010c9f185
-
   const updateUserDetails = async () => {
     if (locationChange || numberChange || telephoneChange || addressChange) {
-      await axios.post(
-        '/user-details/create-details/user/b573fc80-2406-4b2e-9bc0-6a6010c9f185',
-        {
-          location,
-          number,
-          telephone,
-          address,
-        },
-      );
+      await axios.patch('/users/user/updateUser', {
+        firstName: 'firstName',
+        lastName: 'lastname',
+        location: locationChange,
+        number: numberChange.toString(),
+        telephone: telephoneChange,
+        address: addressChange,
+      });
       dispatch(getUserDetails());
     }
   };
 
   return (
-    <Grid container>
-      <Box
-        component='form'
-        noValidate
-        onSubmit={handleSubmit}
-        sx={{
-          margin: 5,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <TextField
-          margin='normal'
-          label='Location'
-          type='text'
-          value={locationChange}
-          autoFocus
-          InputLabelProps={{ shrink: true }}
-          onChange={handleLocationChange}
-        ></TextField>
-        <TextField
-          margin='normal'
-          label='Number'
-          type='text'
-          value={numberChange}
-          autoFocus
-          InputLabelProps={{ shrink: true }}
-          onChange={handleNumberChange}
-        ></TextField>
-        <TextField
-          margin='normal'
-          label='Telephone'
-          type='text'
-          value={telephoneChange}
-          autoFocus
-          InputLabelProps={{ shrink: true }}
-          onChange={handleTelephoneChange}
-        ></TextField>
-        <TextField
-          margin='normal'
-          id='address'
-          label='Address'
-          type='text'
-          value={addressChange}
-          autoFocus
-          InputLabelProps={{ shrink: true }}
-          onChange={handleAddressChange}
-        ></TextField>
-        <Button
-          variant='contained'
-          onClick={() => updateUserDetails()}
-          type='submit'
-        >
-          Save changes!
-        </Button>
-      </Box>
+    <Grid
+      container
+      sx={{
+        margin: 5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {status !== 'success' ? (
+        <Grid item>
+          <CircularProgress />
+        </Grid>
+      ) : (
+        <>
+          <Grid item xs={10} md={7}>
+            <TextField
+              style={{ minWidth: 300 }}
+              margin='normal'
+              label='Location'
+              type='text'
+              value={locationChange}
+              autoFocus
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              onChange={handleLocationChange}
+            />
+          </Grid>
+          <Grid item xs={10} md={7}>
+            <TextField
+              style={{ minWidth: 300 }}
+              margin='normal'
+              label='Number'
+              type='text'
+              fullWidth
+              value={numberChange}
+              InputLabelProps={{ shrink: true }}
+              onChange={handleNumberChange}
+            />
+          </Grid>
+          <Grid item xs={10} md={7}>
+            <TextField
+              style={{ minWidth: 300 }}
+              margin='normal'
+              label='Telephone'
+              type='text'
+              fullWidth
+              value={telephoneChange}
+              autoFocus
+              InputLabelProps={{ shrink: true }}
+              onChange={handleTelephoneChange}
+            />
+          </Grid>
+          <Grid item xs={10} md={7}>
+            <TextField
+              style={{ minWidth: 300 }}
+              margin='normal'
+              id='address'
+              label='Address'
+              type='text'
+              fullWidth
+              value={addressChange}
+              InputLabelProps={{ shrink: true }}
+              onChange={handleAddressChange}
+            />
+          </Grid>
+          <Grid item xs={10} md={7}>
+            <Button
+              variant='contained'
+              onClick={() => updateUserDetails()}
+              type='submit'
+            >
+              Save changes!
+            </Button>
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 }

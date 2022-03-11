@@ -13,7 +13,12 @@ export const getUserDetails = createAsyncThunk(
 const userDetailsSlice = createSlice({
   name: 'userDetails',
   initialState: {
-    data: {},
+    data: {
+      location: '',
+      number: '',
+      telephone: '',
+      address: '',
+    },
     status: 'idle',
   },
   extraReducers(builder) {
@@ -32,5 +37,7 @@ const userDetailsSlice = createSlice({
 });
 
 export const selectUserDetails = (state) => state.userDetails;
+export const selectUserDetailsData = (state) => state.userDetails.data;
+export const selectUserDetailsStatus = (state) => state.userDetails.status;
 
 export default userDetailsSlice.reducer;
