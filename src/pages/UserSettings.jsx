@@ -1,4 +1,4 @@
-import { Button, Grid, IconButton, TextField } from '@mui/material';
+import { Avatar, Button, Grid, IconButton, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from '../utils/axios';
 import React, { useEffect } from 'react';
@@ -82,6 +82,11 @@ export default function UserSettings() {
         </Grid>
       ) : (
         <>
+          <Grid item xs={10}>
+            <IconButton>
+              <Avatar alt='Avatar' src='static/images/avatar.jpeg' />
+            </IconButton>
+          </Grid>
           <Grid item xs={10} md={7}>
             <TextField
               sx={{ maxWidth: '500px' }}
