@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, IconButton, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from '../utils/axios';
 import React, { useEffect } from 'react';
@@ -9,6 +9,8 @@ import {
   selectUserDetailsData,
   selectUserDetailsStatus,
 } from '../features/user/userDetailsSlice';
+import { selectUser } from '../features/user/userSlice';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function UserSettings() {
   const dispatch = useDispatch();
@@ -16,20 +18,22 @@ export default function UserSettings() {
     selectUserDetailsData,
   );
   const status = useSelector(selectUserDetailsStatus);
+  const { firstName, lastName, userId } = useSelector(selectUser);
   const [locationChange, setLocationChange] = useState();
   const [numberChange, setNumberChange] = useState();
   const [telephoneChange, setTelephoneChange] = useState();
   const [addressChange, setAddressChange] = useState();
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     dispatch(getUserDetails());
   }, [dispatch]);
 
   useEffect(() => {
-    setLocationChange(location);
-    setNumberChange(number);
-    setTelephoneChange(telephone.toString());
-    setAddressChange(address);
+    setLocationChange(location || '');
+    setNumberChange(number || '');
+    setTelephoneChange(telephone || '');
+    setAddressChange(address || '');
   }, [number, location, telephone, address]);
 
   const handleLocationChange = (event) => {
@@ -48,39 +52,43 @@ export default function UserSettings() {
     setAddressChange(event.target.value);
   };
 
-  const updateUserDetails = async () => {
-    if (locationChange || numberChange || telephoneChange || addressChange) {
-      await axios.patch('/users/user/updateUser', {
-        firstName: 'firstName',
-        lastName: 'lastname',
+  const createUpdateUserDetails = async () => {
+    if (
+      !locationChange &&
+      !numberChange &&
+      !telephoneChange &&
+      !addressChange
+    ) {
+      await axios.post(`user-details/create-details/user/${userId}`, {
         location: locationChange,
         number: numberChange.toString(),
         telephone: telephoneChange,
         address: addressChange,
       });
-      dispatch(getUserDetails());
+    } else {
+      await axios.patch('users/user/updateUser', {
+        firstName: firstName,
+        lastName: lastName,
+        location: locationChange,
+        number: numberChange.toString(),
+        telephone: telephoneChange,
+        address: addressChange,
+      });
     }
+    dispatch(getUserDetails());
   };
 
   return (
-    <Grid
-      container
-      sx={{
-        margin: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <Grid container direction='row' alignItems='center' justifyContent='center'>
       {status !== 'success' ? (
-        <Grid item>
+        <Grid item xs={12}>
           <CircularProgress />
         </Grid>
       ) : (
         <>
           <Grid item xs={10} md={7}>
             <TextField
-              style={{ minWidth: 300 }}
+              sx={{ maxWidth: '500px' }}
               margin='normal'
               label='Location'
               type='text'
@@ -89,11 +97,12 @@ export default function UserSettings() {
               fullWidth
               InputLabelProps={{ shrink: true }}
               onChange={handleLocationChange}
+              disabled={edit}
             />
           </Grid>
           <Grid item xs={10} md={7}>
             <TextField
-              style={{ minWidth: 300 }}
+              sx={{ maxWidth: '500px' }}
               margin='normal'
               label='Number'
               type='text'
@@ -101,11 +110,12 @@ export default function UserSettings() {
               value={numberChange}
               InputLabelProps={{ shrink: true }}
               onChange={handleNumberChange}
+              disabled={edit}
             />
           </Grid>
           <Grid item xs={10} md={7}>
             <TextField
-              style={{ minWidth: 300 }}
+              sx={{ maxWidth: '500px' }}
               margin='normal'
               label='Telephone'
               type='text'
@@ -114,11 +124,12 @@ export default function UserSettings() {
               autoFocus
               InputLabelProps={{ shrink: true }}
               onChange={handleTelephoneChange}
+              disabled={edit}
             />
           </Grid>
           <Grid item xs={10} md={7}>
             <TextField
-              style={{ minWidth: 300 }}
+              sx={{ maxWidth: '500px' }}
               margin='normal'
               id='address'
               label='Address'
@@ -127,16 +138,33 @@ export default function UserSettings() {
               value={addressChange}
               InputLabelProps={{ shrink: true }}
               onChange={handleAddressChange}
+              disabled={edit}
             />
           </Grid>
-          <Grid item xs={10} md={7}>
-            <Button
-              variant='contained'
-              onClick={() => updateUserDetails()}
-              type='submit'
-            >
-              Save changes!
-            </Button>
+          <Grid
+            container
+            spacing={3}
+            justifyContent='space-evenly'
+            alignItems='center'
+          >
+            <Grid item xs={2}>
+              <Button
+                sx={{ maxWidth: '500px' }}
+                variant='contained'
+                onClick={() => createUpdateUserDetails()}
+                type='submit'
+              >
+                Save!
+              </Button>
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton
+                sx={{ maxWidth: '500px' }}
+                onClick={() => setEdit(!edit)}
+              >
+                <EditIcon />
+              </IconButton>
+            </Grid>
           </Grid>
         </>
       )}

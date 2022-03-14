@@ -14,6 +14,8 @@ const userDetailsSlice = createSlice({
   name: 'userDetails',
   initialState: {
     data: {
+      firstName: '',
+      lastName: '',
       location: '',
       number: '',
       telephone: '',

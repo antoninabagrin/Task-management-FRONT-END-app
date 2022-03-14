@@ -2,10 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: { isAuth: false },
+  initialState: {
+    isAuth: false,
+    user: {},
+  },
   reducers: {
-    handleLogin: (state) => {
+    handleLogin: (state, action) => {
       state.isAuth = true;
+      state.user = action.payload;
     },
     handleLogout: (state) => {
       state.isAuth = false;
@@ -17,5 +21,6 @@ const userSlice = createSlice({
 });
 
 export const { handleLogin, handleLogout, setIsAuth } = userSlice.actions;
+export const selectUser = (state) => state.user.user;
 
 export default userSlice.reducer;

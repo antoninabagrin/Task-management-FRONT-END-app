@@ -21,12 +21,13 @@ function App() {
     const token = localStorage.getItem('jwt');
 
     if (token) {
-      const { exp } = jwt_decode(token);
+      const { exp, user } = jwt_decode(token);
       if (exp * 1000 < Date.now()) {
         localStorage.removeItem('jwt');
         dispatch(handleLogout());
       } else {
-        dispatch(handleLogin(token));
+        dispatch(handleLogin(user));
+        console.log(user, 'user');
       }
     }
   }, [dispatch]);
