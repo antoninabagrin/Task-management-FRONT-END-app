@@ -21,6 +21,7 @@ const userDetailsSlice = createSlice({
       telephone: '',
       address: '',
     },
+    user: {},
     status: 'idle',
   },
   extraReducers(builder) {

@@ -9,7 +9,7 @@ import { RequireAuth } from './components/RequireAuth';
 import Dashboard from './pages/Dashboard/Dashboard';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { handleLogin, handleLogout } from './features/user/userSlice';
+import { handleLogin, handleLogout, setUser } from './features/user/userSlice';
 import jwt_decode from 'jwt-decode';
 import SignUp from './pages/SignUp/SignUp';
 import UserSettings from './pages/UserSettings';
@@ -26,8 +26,8 @@ function App() {
         localStorage.removeItem('jwt');
         dispatch(handleLogout());
       } else {
-        dispatch(handleLogin(user));
-        console.log(user, 'user');
+        dispatch(handleLogin());
+        dispatch(setUser(user));
       }
     }
   }, [dispatch]);

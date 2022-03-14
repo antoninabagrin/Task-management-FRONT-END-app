@@ -17,13 +17,14 @@ export default function UserSettings() {
   const { location, number, telephone, address } = useSelector(
     selectUserDetailsData,
   );
+  const data = useSelector(selectUserDetailsData);
   const status = useSelector(selectUserDetailsStatus);
-  const { firstName, lastName, userId } = useSelector(selectUser);
+  const user = useSelector(selectUser);
   const [locationChange, setLocationChange] = useState();
   const [numberChange, setNumberChange] = useState();
   const [telephoneChange, setTelephoneChange] = useState();
   const [addressChange, setAddressChange] = useState();
-  const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(true);
 
   useEffect(() => {
     dispatch(getUserDetails());
@@ -53,25 +54,20 @@ export default function UserSettings() {
   };
 
   const createUpdateUserDetails = async () => {
-    if (
-      !locationChange &&
-      !numberChange &&
-      !telephoneChange &&
-      !addressChange
-    ) {
-      await axios.post(`user-details/create-details/user/${userId}`, {
+    if (data === '') {
+      await axios.post(`user-details/create-details/user/${user.id}`, {
         location: locationChange,
         number: numberChange.toString(),
-        telephone: telephoneChange,
+        telephone: telephoneChange.toString(),
         address: addressChange,
       });
     } else {
       await axios.patch('users/user/updateUser', {
-        firstName: firstName,
-        lastName: lastName,
+        firstName: user.firstName,
+        lastName: user.lastName,
         location: locationChange,
         number: numberChange.toString(),
-        telephone: telephoneChange,
+        telephone: telephoneChange.toString(),
         address: addressChange,
       });
     }
@@ -105,7 +101,7 @@ export default function UserSettings() {
               sx={{ maxWidth: '500px' }}
               margin='normal'
               label='Number'
-              type='text'
+              type='number'
               fullWidth
               value={numberChange}
               InputLabelProps={{ shrink: true }}
@@ -118,7 +114,7 @@ export default function UserSettings() {
               sx={{ maxWidth: '500px' }}
               margin='normal'
               label='Telephone'
-              type='text'
+              type='number'
               fullWidth
               value={telephoneChange}
               autoFocus
@@ -143,13 +139,14 @@ export default function UserSettings() {
           </Grid>
           <Grid
             container
-            spacing={3}
-            justifyContent='space-evenly'
+            direction='row'
+            justifyContent='flex-end'
             alignItems='center'
           >
-            <Grid item xs={2}>
+            <Grid item xs={8} md={4}>
               <Button
                 sx={{ maxWidth: '500px' }}
+                size='large'
                 variant='contained'
                 onClick={() => createUpdateUserDetails()}
                 type='submit'
@@ -157,7 +154,7 @@ export default function UserSettings() {
                 Save!
               </Button>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={4} md={4}>
               <IconButton
                 sx={{ maxWidth: '500px' }}
                 onClick={() => setEdit(!edit)}

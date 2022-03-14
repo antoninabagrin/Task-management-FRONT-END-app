@@ -4,11 +4,21 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     isAuth: false,
-    user: {},
+    user: {
+      id: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      role: '',
+      profileImage: '',
+      isDeactivated: '',
+    },
   },
   reducers: {
     handleLogin: (state, action) => {
       state.isAuth = true;
+    },
+    setUser: (state, action) => {
       state.user = action.payload;
     },
     handleLogout: (state) => {
@@ -20,7 +30,8 @@ const userSlice = createSlice({
   },
 });
 
-export const { handleLogin, handleLogout, setIsAuth } = userSlice.actions;
+export const { handleLogin, handleLogout, setIsAuth, setUser } =
+  userSlice.actions;
 export const selectUser = (state) => state.user.user;
 
 export default userSlice.reducer;
