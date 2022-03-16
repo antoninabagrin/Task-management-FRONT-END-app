@@ -86,7 +86,7 @@ export default function Header() {
               <IconButton onClick={() => handleOpenUserMenu()}>
                 <Avatar
                   alt='Avatar'
-                  src='static/images/avatar.jpeg'
+                  src='/static/avatar.jpeg'
                   ref={anchorRef}
                 />
               </IconButton>
