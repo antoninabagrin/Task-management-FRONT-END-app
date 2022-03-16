@@ -1,4 +1,11 @@
-import { Avatar, Button, Grid, IconButton, TextField } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Grid,
+  IconButton,
+  Input,
+  TextField,
+} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from '../utils/axios';
 import React, { useEffect } from 'react';
@@ -11,6 +18,7 @@ import {
 } from '../features/user/userDetailsSlice';
 import { selectUser } from '../features/user/userSlice';
 import EditIcon from '@mui/icons-material/Edit';
+import { useTranslation } from 'react-i18next';
 
 export default function UserSettings() {
   const dispatch = useDispatch();
@@ -25,17 +33,31 @@ export default function UserSettings() {
   const [telephoneChange, setTelephoneChange] = useState();
   const [addressChange, setAddressChange] = useState();
   const [edit, setEdit] = useState(true);
+  const [image, setImage] = useState(null);
+  const [profileImage, setProfileImage] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getUserDetails());
-  }, [dispatch]);
+    const getUserImage = async (body) => {
+      const res = await axios.get('/users/user/profile-image', {
+        responseType: 'blob',
+      });
+      const imageOject = await res.data;
+      return URL.createObjectURL(imageOject);
+    };
+    if (!profileImage.match('blob:')) {
+      getUserImage();
+    }
+  }, [dispatch, profileImage]);
 
   useEffect(() => {
     setLocationChange(location || '');
     setNumberChange(number || '');
     setTelephoneChange(telephone || '');
     setAddressChange(address || '');
-  }, [number, location, telephone, address]);
+    setImage(profileImage || null);
+  }, [number, location, telephone, address, profileImage]);
 
   const handleLocationChange = (event) => {
     setLocationChange(event.target.value);
@@ -51,6 +73,23 @@ export default function UserSettings() {
 
   const handleAddressChange = (event) => {
     setAddressChange(event.target.value);
+  };
+
+  const handleChangeImage = (e) => {
+    let formData = new FormData();
+    let file = e.target.files[0];
+    if (file.length) {
+      if (!file.files[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
+        let error = t('errorImageWrongFormat');
+        // setOpenDialog(true);
+        // setErrorMessage(error);
+      }
+    } else {
+      formData.append('file', file);
+      axios.post('/users/upload/profile-image', file, {
+        headers: { 'Content-Type': 'multipart/form-data;boundary' },
+      });
+    }
   };
 
   const createUpdateUserDetails = async () => {
@@ -82,11 +121,22 @@ export default function UserSettings() {
         </Grid>
       ) : (
         <>
-          <Grid item xs={10}>
-            <IconButton>
-              <Avatar alt='Avatar' src='static/images/avatar.jpeg' />
-            </IconButton>
-          </Grid>
+          <Avatar
+            src={profileImage || image}
+            alt='img'
+            sx={{ width: 100, height: 100 }}
+          />
+          <label htmlFor='file'>
+            <h5 className='text-center'>uploadPhoto</h5>
+            <Input
+              type='file'
+              id='file'
+              // ref={hiddenFileInput}
+              onChange={handleChangeImage}
+              style={{ display: 'none' }}
+              inputProps={{ accept: 'image/x-png,image/gif,image/jpeg' }}
+            />
+          </label>
           <Grid item xs={10} md={7}>
             <TextField
               sx={{ maxWidth: '500px' }}
@@ -98,7 +148,7 @@ export default function UserSettings() {
               fullWidth
               InputLabelProps={{ shrink: true }}
               onChange={handleLocationChange}
-              disabled={edit}
+              disabled={data === '' ? false : edit}
             />
           </Grid>
           <Grid item xs={10} md={7}>
@@ -111,7 +161,7 @@ export default function UserSettings() {
               value={numberChange}
               InputLabelProps={{ shrink: true }}
               onChange={handleNumberChange}
-              disabled={edit}
+              disabled={data === '' ? false : edit}
             />
           </Grid>
           <Grid item xs={10} md={7}>
