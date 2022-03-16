@@ -1,4 +1,11 @@
-import { Button, Grid, IconButton, Input, TextField } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Grid,
+  IconButton,
+  Input,
+  TextField,
+} from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from '../utils/axios';
 import React, { useEffect } from 'react';
@@ -13,7 +20,7 @@ import { selectUser } from '../features/user/userSlice';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTranslation } from 'react-i18next';
 
-export default function UserSettings(imageObjectURL) {
+export default function UserSettings() {
   const dispatch = useDispatch();
   const { location, number, telephone, address } = useSelector(
     selectUserDetailsData,
@@ -26,29 +33,31 @@ export default function UserSettings(imageObjectURL) {
   const [telephoneChange, setTelephoneChange] = useState();
   const [addressChange, setAddressChange] = useState();
   const [edit, setEdit] = useState(true);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
+  const [profileImage, setProfileImage] = useState('');
   const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getUserDetails());
-    const getUserImage = async () => {
+    const getUserImage = async (body) => {
       const res = await axios.get('/users/user/profile-image', {
         responseType: 'blob',
       });
-      const imageObjectURL = URL.createObjectURL(res.data);
-      // console.log(imageObjectURL, 'imgURL');
+      const imageOject = await res.data;
+      return URL.createObjectURL(imageOject);
     };
-    getUserImage();
-  }, [dispatch]);
-  // console.log(imageObjectURL, 'imgURL');
+    if (!profileImage.match('blob:')) {
+      getUserImage();
+    }
+  }, [dispatch, profileImage]);
 
   useEffect(() => {
     setLocationChange(location || '');
     setNumberChange(number || '');
     setTelephoneChange(telephone || '');
     setAddressChange(address || '');
-    setImage(imageObjectURL || null);
-  }, [number, location, telephone, address, imageObjectURL]);
+    setImage(profileImage || null);
+  }, [number, location, telephone, address, profileImage]);
 
   const handleLocationChange = (event) => {
     setLocationChange(event.target.value);
@@ -67,19 +76,23 @@ export default function UserSettings(imageObjectURL) {
   };
 
   const handleChangeImage = (e) => {
-    console.log(e.target.files[0], 'event');
-    if (e.target.files.length) {
-      // handleValidation
-      if (!e.target.files[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
+    let formData = new FormData();
+    let file = e.target.files[0];
+    if (file.length) {
+      if (!file.files[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
         let error = t('errorImageWrongFormat');
         // setOpenDialog(true);
         // setErrorMessage(error);
-      } else {
-        setImage({
-          preview: URL.createObjectURL(e.target.files[0]),
-          raw: e.target.files[0],
-        });
       }
+    } else {
+      formData.append('file', file);
+      axios.post('/users/upload/profile-image', file, {
+        headers: { 'Content-Type': 'multipart/form-data;boundary' },
+      });
+      console.log(data.profileImage);
+      // return res.data;
+      // };
+      // updateUserProfile();
     }
   };
 
@@ -112,10 +125,10 @@ export default function UserSettings(imageObjectURL) {
         </Grid>
       ) : (
         <>
-          <img
-            src={image.preview}
+          <Avatar
+            src={profileImage || image}
             alt='img'
-            style={{ width: '20px', height: '20px' }}
+            sx={{ width: 100, height: 100 }}
           />
           <label htmlFor='file'>
             <h5 className='text-center'>uploadPhoto</h5>
