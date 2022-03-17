@@ -1,15 +1,16 @@
+import React, { useEffect, useState } from 'react';
 import {
-  Avatar,
+  Alert,
   Button,
   Grid,
   IconButton,
   Input,
+  Stack,
   TextField,
+  Typography,
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import CircularProgress from '@mui/material/CircularProgress';
-import axios from '../utils/axios';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getUserDetails,
@@ -17,8 +18,13 @@ import {
   selectUserDetailsStatus,
 } from '../features/user/userDetailsSlice';
 import { selectUser } from '../features/user/userSlice';
-import EditIcon from '@mui/icons-material/Edit';
+import axios from '../utils/axios';
 import { useTranslation } from 'react-i18next';
+import {
+  getUserImage,
+  setUserImage,
+  updateUserImage,
+} from '../features/user/userImageSlice';
 
 export default function UserSettings() {
   const dispatch = useDispatch();
@@ -28,36 +34,44 @@ export default function UserSettings() {
   const data = useSelector(selectUserDetailsData);
   const status = useSelector(selectUserDetailsStatus);
   const user = useSelector(selectUser);
+  const profileImage = useSelector((state) => state.userImage.profileImage);
   const [locationChange, setLocationChange] = useState();
   const [numberChange, setNumberChange] = useState();
   const [telephoneChange, setTelephoneChange] = useState();
   const [addressChange, setAddressChange] = useState();
   const [edit, setEdit] = useState(true);
-  const [image, setImage] = useState(null);
-  const [profileImage, setProfileImage] = useState('');
+  const [image, setImage] = useState(profileImage);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [openDialog, setOpenDialog] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getUserDetails());
-    const getUserImage = async (body) => {
-      const res = await axios.get('/users/user/profile-image', {
-        responseType: 'blob',
-      });
-      const imageOject = await res.data;
-      return URL.createObjectURL(imageOject);
-    };
-    if (!profileImage.match('blob:')) {
-      getUserImage();
-    }
-  }, [dispatch, profileImage]);
+    dispatch(getUserImage());
+    // const getUserImage = async () => {
+    //   const res = await axios.get('/users/user/profile-image', {
+    //     responseType: 'blob',
+    //   });
+    //   setImage({
+    //     preview: URL.createObjectURL(res.data),
+    //     raw: res.data,
+    //   });
+    // };
+    // getUserImage();
+  }, [dispatch]);
 
   useEffect(() => {
     setLocationChange(location || '');
     setNumberChange(number || '');
     setTelephoneChange(telephone || '');
     setAddressChange(address || '');
-    setImage(profileImage || null);
-  }, [number, location, telephone, address, profileImage]);
+    setImage(profileImage || '');
+    // if (errorMessage) {
+    //   setTimeout(() => {
+    //     setErrorMessage('');
+    //   }, 5000);
+    // }
+  }, [number, location, telephone, address, profileImage, errorMessage]);
 
   const handleLocationChange = (event) => {
     setLocationChange(event.target.value);
@@ -76,76 +90,99 @@ export default function UserSettings() {
   };
 
   const handleChangeImage = (e) => {
-    let formData = new FormData();
-    let file = e.target.files[0];
-    if (file.length) {
-      if (!file.files[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
+    if (e.target.files.length) {
+      if (!e.target.files[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
         let error = t('errorImageWrongFormat');
-        // setOpenDialog(true);
-        // setErrorMessage(error);
+        setOpenDialog(true);
+        setErrorMessage(error);
+      } else {
+        dispatch(
+          setUserImage({
+            preview: URL.createObjectURL(e.target.files[0]),
+            raw: e.target.files[0],
+          }),
+        );
+        // setImage({
+        //   preview: URL.createObjectURL(e.target.files[0]),
+        //   raw: e.target.files[0],
+        // });
       }
-    } else {
-      formData.append('file', file);
-      axios.post('/users/upload/profile-image', file, {
-        headers: { 'Content-Type': 'multipart/form-data;boundary' },
-      });
-      console.log(data.profileImage);
-      // return res.data;
-      // };
-      // updateUserProfile();
     }
   };
 
   const createUpdateUserDetails = async () => {
-    if (data === '') {
-      await axios.post(`user-details/create-details/user/${user.id}`, {
-        location: locationChange,
-        number: numberChange.toString(),
-        telephone: telephoneChange.toString(),
-        address: addressChange,
-      });
-    } else {
-      await axios.patch('users/user/updateUser', {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        location: locationChange,
-        number: numberChange.toString(),
-        telephone: telephoneChange.toString(),
-        address: addressChange,
-      });
+    try {
+      if (data === '') {
+        await axios.post(`user-details/create-details/user/${user.id}`, {
+          location: locationChange,
+          number: numberChange.toString(),
+          telephone: telephoneChange.toString(),
+          address: addressChange,
+        });
+      } else {
+        await axios.patch('users/user/updateUser', {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          location: locationChange,
+          number: numberChange.toString(),
+          telephone: telephoneChange.toString(),
+          address: addressChange,
+        });
+      }
+    } catch (error) {
+      setOpenDialog(true);
+      setErrorMessage(error);
+      console.log(error, 'error');
+    } finally {
+      // const formData = new FormData();
+      // formData.append('file', profileImage.raw);
+      // await axios.post('/users/upload/profile-image', formData, {
+      //   headers: { 'Content-type': 'multipart/form-data' },
+      // });
+      dispatch(updateUserImage());
     }
     dispatch(getUserDetails());
   };
-
   return (
     <Grid container direction='row' alignItems='center' justifyContent='center'>
+      {openDialog && (
+        <Stack sx={{ width: '100%' }} spacing={2}>
+          <Alert severity='error' />
+        </Stack>
+      )}
       {status !== 'success' ? (
         <Grid item xs={12}>
           <CircularProgress />
         </Grid>
       ) : (
         <>
-          <Avatar
-            src={profileImage || image}
-            alt='img'
-            sx={{ width: 100, height: 100 }}
-          />
-          <label htmlFor='file'>
-            <h5 className='text-center'>uploadPhoto</h5>
-            <Input
-              type='file'
-              id='file'
-              // ref={hiddenFileInput}
-              onChange={handleChangeImage}
-              style={{ display: 'none' }}
-              inputProps={{ accept: 'image/x-png,image/gif,image/jpeg' }}
-            />
-          </label>
+          <Grid item xs={10} md={7}>
+            {image && (
+              <img
+                src={profileImage.preview}
+                alt='img'
+                style={{ width: '100px', height: '100px' }}
+              />
+            )}
+            <label htmlFor='file'>
+              <Typography component='h1' variant='h5'>
+                {t('Upload Photo')}
+              </Typography>
+              <Input
+                type='file'
+                id='file'
+                // ref={hiddenFileInput}
+                onChange={handleChangeImage}
+                style={{ display: 'none' }}
+                inputProps={{ accept: 'image/x-png,image/gif,image/jpeg' }}
+              />
+            </label>
+          </Grid>
           <Grid item xs={10} md={7}>
             <TextField
               sx={{ maxWidth: '500px' }}
               margin='normal'
-              label='Location'
+              label={t('Location')}
               type='text'
               value={locationChange}
               autoFocus
@@ -159,7 +196,7 @@ export default function UserSettings() {
             <TextField
               sx={{ maxWidth: '500px' }}
               margin='normal'
-              label='Number'
+              label={t('Number')}
               type='number'
               fullWidth
               value={numberChange}
@@ -172,7 +209,7 @@ export default function UserSettings() {
             <TextField
               sx={{ maxWidth: '500px' }}
               margin='normal'
-              label='Telephone'
+              label={t('Telephone')}
               type='number'
               fullWidth
               value={telephoneChange}
@@ -187,7 +224,7 @@ export default function UserSettings() {
               sx={{ maxWidth: '500px' }}
               margin='normal'
               id='address'
-              label='Address'
+              label={t('Address')}
               type='text'
               fullWidth
               value={addressChange}
@@ -196,34 +233,34 @@ export default function UserSettings() {
               disabled={edit}
             />
           </Grid>
-          <Grid
-            container
-            direction='row'
-            justifyContent='flex-end'
-            alignItems='center'
-          >
-            <Grid item xs={8} md={4}>
-              <Button
-                sx={{ maxWidth: '500px' }}
-                size='large'
-                variant='contained'
-                onClick={() => createUpdateUserDetails()}
-                type='submit'
-              >
-                Save!
-              </Button>
-            </Grid>
-            <Grid item xs={4} md={4}>
-              <IconButton
-                sx={{ maxWidth: '500px' }}
-                onClick={() => setEdit(!edit)}
-              >
-                <EditIcon />
-              </IconButton>
-            </Grid>
+          <Grid item xs={10} md={7}>
+            <Button
+              sx={{ maxWidth: '500px' }}
+              size='large'
+              variant='contained'
+              onClick={() => createUpdateUserDetails()}
+              type='submit'
+            >
+              {t('Save!')}
+            </Button>
+            <IconButton
+              sx={{ maxWidth: '500px' }}
+              onClick={() => setEdit(!edit)}
+            >
+              <EditIcon />
+            </IconButton>
           </Grid>
         </>
       )}
     </Grid>
   );
 }
+
+/*
+
+1. Error handling 
+2. Actions =>  REDUX
+3. i18n!!!
+4. Butoanele de edit ^ save
+5. Typography UPLOAD IMAGE
+*/

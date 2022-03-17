@@ -15,15 +15,24 @@ import { setIsAuth } from '../features/user/userSlice';
 import languages from '../utils/languages/languagesData';
 import { useTranslation } from 'react-i18next';
 import { Settings } from '@mui/icons-material';
+import { useEffect } from 'react';
+import { getUserImage } from '../features/user/userImageSlice';
 
 export default function Header() {
   const isAuth = useSelector((state) => state.user.isAuth);
+  const profileImage = useSelector((state) => state.userImage.profileImage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [t, i18n] = useTranslation();
   const [languageMenu, setLanguageMenu] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
+  const [image, setImage] = useState(null);
   const anchorRef = React.useRef(null);
+
+  useEffect(() => {
+    dispatch(getUserImage());
+    setImage(profileImage || null);
+  }, [dispatch, profileImage]);
 
   const Logout = () => {
     dispatch(setIsAuth(false));
@@ -84,11 +93,7 @@ export default function Header() {
           {isAuth && (
             <Box>
               <IconButton onClick={() => handleOpenUserMenu()}>
-                <Avatar
-                  alt='Avatar'
-                  src='/static/avatar.jpeg'
-                  ref={anchorRef}
-                />
+                <Avatar alt='avatar' src={image} ref={anchorRef} />
               </IconButton>
               <Menu
                 anchorEl={anchorRef.current}

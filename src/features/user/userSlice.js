@@ -10,6 +10,7 @@ const userSlice = createSlice({
       lastName: '',
       email: '',
       role: '',
+
       isDeactivated: '',
     },
   },
