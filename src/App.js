@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Header from './components/Header';
 import { RequireAuth } from './components/RequireAuth';
 import Dashboard from './pages/Dashboard/Dashboard';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { handleLogin, handleLogout, setUser } from './features/user/userSlice';
 import jwt_decode from 'jwt-decode';
@@ -16,21 +16,21 @@ import UserSettings from './pages/UserSettings';
 
 function App() {
   const dispatch = useDispatch();
+  const token = localStorage.getItem('jwt');
+  const isAuth = useSelector((state) => state.user.isAuth);
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
-
     if (token) {
-      const { exp, user } = jwt_decode(token);
+      const { exp, user } = jwt_decode(token, { complete: true });
+      dispatch(setUser(user));
       if (exp * 1000 < Date.now()) {
         localStorage.removeItem('jwt');
         dispatch(handleLogout());
       } else {
         dispatch(handleLogin());
-        dispatch(setUser(user));
       }
     }
-  }, [dispatch]);
+  }, [dispatch, token, isAuth]);
 
   return (
     <ThemeProvider theme={theme}>

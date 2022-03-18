@@ -21,6 +21,7 @@ import { getUserImage } from '../features/user/userImageSlice';
 export default function Header() {
   const isAuth = useSelector((state) => state.user.isAuth);
   const profileImage = useSelector((state) => state.userImage.profileImage);
+  const userProfileImage = useSelector((state) => state.user.user.profileImage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [t, i18n] = useTranslation();
@@ -30,9 +31,14 @@ export default function Header() {
   const anchorRef = React.useRef(null);
 
   useEffect(() => {
-    dispatch(getUserImage());
+    if (!userProfileImage?.length > 0) {
+      dispatch(getUserImage());
+    }
+  }, [dispatch, userProfileImage]);
+
+  useEffect(() => {
     setImage(profileImage || null);
-  }, [dispatch, profileImage]);
+  }, [profileImage]);
 
   const Logout = () => {
     dispatch(setIsAuth(false));
@@ -93,7 +99,7 @@ export default function Header() {
           {isAuth && (
             <Box>
               <IconButton onClick={() => handleOpenUserMenu()}>
-                <Avatar alt='avatar' src={image} ref={anchorRef} />
+                <Avatar alt={image} src={image} ref={anchorRef} />
               </IconButton>
               <Menu
                 anchorEl={anchorRef.current}

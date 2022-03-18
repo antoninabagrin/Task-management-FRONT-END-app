@@ -1,30 +1,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from '../../utils/axios';
-import userSlice from './userSlice';
 
 export const getUserImage = createAsyncThunk(
   'userImage/getUserImage',
 
-  async () => {
+  async (body, thnukAPI) => {
     const res = await axios.get('/users/user/profile-image', {
       responseType: 'blob',
     });
-    return setUserImage({
-      preview: URL.createObjectURL(res.data),
-      raw: res.data,
-    });
+
+    const imageObj = await res.data;
+    thnukAPI.dispatch(setUserImage(URL.createObjectURL(imageObj)));
+    return URL.createObjectURL(imageObj);
   },
 );
 
 export const updateUserImage = createAsyncThunk(
   'userImage/updateUserImage',
 
-  async (profileImage) => {
+  async (profileImage, thnukAPI) => {
     const formData = new FormData();
-    formData.append('file', profileImage.raw);
+    formData.append('file', profileImage);
     await axios.post('/users/upload/profile-image', formData, {
       headers: { 'Content-type': 'multipart/form-data' },
     });
+    thnukAPI.dispatch(getUserImage());
   },
 );
 const userImageSlice = createSlice({
@@ -45,7 +45,7 @@ const userImageSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(getUserImage.fulfilled, (state, action) => {
-        state.profileImage = action.payload.profileImage;
+        state.profileImage = action.payload;
         state.status = 'succes';
       })
       .addCase(getUserImage.rejected, (state, _action) => {
@@ -53,7 +53,7 @@ const userImageSlice = createSlice({
       });
   },
 });
-export const setUserImage = userSlice.action;
+export const { setUserImage } = userImageSlice.actions;
 export const selectUserImage = (state) => state.userImage.profileImage;
 
 export default userImageSlice.reducer;

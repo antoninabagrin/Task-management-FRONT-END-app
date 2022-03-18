@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Alert,
   Button,
   Grid,
   IconButton,
   Input,
-  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -20,11 +18,8 @@ import {
 import { selectUser } from '../features/user/userSlice';
 import axios from '../utils/axios';
 import { useTranslation } from 'react-i18next';
-import {
-  getUserImage,
-  setUserImage,
-  updateUserImage,
-} from '../features/user/userImageSlice';
+import { updateUserImage } from '../features/user/userImageSlice';
+import BasicAlerts from '../components/BasicAlerts';
 
 export default function UserSettings() {
   const dispatch = useDispatch();
@@ -42,22 +37,10 @@ export default function UserSettings() {
   const [edit, setEdit] = useState(true);
   const [image, setImage] = useState(profileImage);
   const [errorMessage, setErrorMessage] = useState('');
-  const [openDialog, setOpenDialog] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getUserDetails());
-    dispatch(getUserImage());
-    // const getUserImage = async () => {
-    //   const res = await axios.get('/users/user/profile-image', {
-    //     responseType: 'blob',
-    //   });
-    //   setImage({
-    //     preview: URL.createObjectURL(res.data),
-    //     raw: res.data,
-    //   });
-    // };
-    // getUserImage();
   }, [dispatch]);
 
   useEffect(() => {
@@ -66,11 +49,11 @@ export default function UserSettings() {
     setTelephoneChange(telephone || '');
     setAddressChange(address || '');
     setImage(profileImage || '');
-    // if (errorMessage) {
-    //   setTimeout(() => {
-    //     setErrorMessage('');
-    //   }, 5000);
-    // }
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
+    }
   }, [number, location, telephone, address, profileImage, errorMessage]);
 
   const handleLocationChange = (event) => {
@@ -93,19 +76,9 @@ export default function UserSettings() {
     if (e.target.files.length) {
       if (!e.target.files[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
         let error = t('errorImageWrongFormat');
-        setOpenDialog(true);
         setErrorMessage(error);
       } else {
-        dispatch(
-          setUserImage({
-            preview: URL.createObjectURL(e.target.files[0]),
-            raw: e.target.files[0],
-          }),
-        );
-        // setImage({
-        //   preview: URL.createObjectURL(e.target.files[0]),
-        //   raw: e.target.files[0],
-        // });
+        dispatch(updateUserImage(e.target.files[0]));
       }
     }
   };
@@ -130,26 +103,13 @@ export default function UserSettings() {
         });
       }
     } catch (error) {
-      setOpenDialog(true);
       setErrorMessage(error);
-      console.log(error, 'error');
-    } finally {
-      // const formData = new FormData();
-      // formData.append('file', profileImage.raw);
-      // await axios.post('/users/upload/profile-image', formData, {
-      //   headers: { 'Content-type': 'multipart/form-data' },
-      // });
-      dispatch(updateUserImage());
     }
     dispatch(getUserDetails());
   };
   return (
     <Grid container direction='row' alignItems='center' justifyContent='center'>
-      {openDialog && (
-        <Stack sx={{ width: '100%' }} spacing={2}>
-          <Alert severity='error' />
-        </Stack>
-      )}
+      {errorMessage && <BasicAlerts message={errorMessage} />}
       {status !== 'success' ? (
         <Grid item xs={12}>
           <CircularProgress />
@@ -159,7 +119,7 @@ export default function UserSettings() {
           <Grid item xs={10} md={7}>
             {image && (
               <img
-                src={profileImage.preview}
+                src={profileImage}
                 alt='img'
                 style={{ width: '100px', height: '100px' }}
               />
@@ -255,12 +215,3 @@ export default function UserSettings() {
     </Grid>
   );
 }
-
-/*
-
-1. Error handling 
-2. Actions =>  REDUX
-3. i18n!!!
-4. Butoanele de edit ^ save
-5. Typography UPLOAD IMAGE
-*/
