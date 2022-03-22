@@ -27,6 +27,8 @@ export default function SignUp() {
   const formik = useFormik({
     initialValues: {
       email: '',
+      firstName: '',
+      lastName: '',
       username: '',
       password: '',
       confirmPassword: '',
@@ -34,6 +36,12 @@ export default function SignUp() {
     },
     validationSchema: Yup.object({
       email: Yup.string().email(t('Invalid email')).required(t('Required')),
+      firstName: Yup.string()
+        .max(20, t('Must be 20 characters or less'))
+        .required(t('Required')),
+      lastName: Yup.string()
+        .max(20, t('Must be 20 characters or less'))
+        .required(t('Required')),
       username: Yup.string()
         .max(10, t('Must be 10 characters or less'))
         .required(t('Required')),
@@ -44,10 +52,11 @@ export default function SignUp() {
       ),
     }),
     onSubmit: (values) => {
-      console.log('values', values);
       axios
         .post('/auth/signup', {
           email: values.email,
+          firstName: values.firstName,
+          lastName: values.lastName,
           password: values.password,
           confirmPassword: values.confirmPassword,
           username: values.username,
@@ -100,6 +109,32 @@ export default function SignUp() {
             />
             {formik.touched.email && formik.errors.email && (
               <div style={errorStyle}>{formik.errors.email}</div>
+            )}
+            <TextField
+              margin='normal'
+              fullWidth
+              autoFocus
+              label={t('First Name')}
+              id='firstName'
+              name='firstName'
+              onChange={formik.handleChange}
+              value={formik.values.firstName}
+            />
+            {formik.touched.firstName && formik.errors.firstName && (
+              <div style={errorStyle}>{formik.errors.firstName}</div>
+            )}
+            <TextField
+              margin='normal'
+              fullWidth
+              autoFocus
+              label={t('Last Name')}
+              id='lastName'
+              name='lastName'
+              onChange={formik.handleChange}
+              value={formik.values.lastName}
+            />
+            {formik.touched.lastName && formik.errors.lastName && (
+              <div style={errorStyle}>{formik.errors.lastName}</div>
             )}
             <TextField
               margin='normal'
