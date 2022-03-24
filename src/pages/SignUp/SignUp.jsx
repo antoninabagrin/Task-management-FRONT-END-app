@@ -150,6 +150,7 @@ export default function SignUp() {
               <div style={errorStyle}>{formik.errors.username}</div>
             )}
             <TextField
+              data-testid='passwordButton'
               margin='normal'
               fullWidth
               autoFocus
@@ -194,6 +195,7 @@ export default function SignUp() {
             )}
 
             <Button
+              data-testid='joinButton'
               type='submit'
               fullWidth
               variant='contained'
