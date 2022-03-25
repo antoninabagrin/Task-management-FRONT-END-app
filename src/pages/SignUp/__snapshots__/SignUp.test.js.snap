@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignUp SignUp render 1`] = `
+<input
+  aria-invalid="false"
+  class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+  data-testid="required-confirmPassword"
+  id="confirmPassword"
+  name="confirmPassword"
+  required=""
+  type="password"
+  value=""
+/>
+`;
+
+exports[`SignUp SignUp render 2`] = `
+<input
+  aria-invalid="false"
+  class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+  data-testid="required-confirmPassword"
+  id="confirmPassword"
+  name="confirmPassword"
+  required=""
+  type="password"
+  value="Hey"
+/>
+`;

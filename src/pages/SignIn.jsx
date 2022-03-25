@@ -10,7 +10,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { Link } from '@mui/material';
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+// import  {useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 import { useDispatch } from 'react-redux';
 import { handleLogin, setIsAuth } from '../features/user/userSlice';
@@ -19,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 export default function SignIn() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -40,7 +41,7 @@ export default function SignIn() {
       if (token) {
         localStorage.setItem('jwt', token);
         dispatch(setIsAuth(true));
-        navigate(from, { replace: true });
+        // navigate(from, { replace: true });
       }
     }
   };

@@ -7,12 +7,13 @@ import Home from './pages/Home';
 import Header from './components/Header';
 import { RequireAuth } from './components/RequireAuth';
 import Dashboard from './pages/Dashboard/Dashboard';
-import { useDispatch, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { handleLogin, handleLogout, setUser } from './features/user/userSlice';
 import jwt_decode from 'jwt-decode';
 import SignUp from './pages/SignUp/SignUp';
 import UserSettings from './pages/UserSettings';
+import store from './store';
 
 function App() {
   const dispatch = useDispatch();

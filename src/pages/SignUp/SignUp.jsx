@@ -77,7 +77,13 @@ export default function SignUp() {
   };
 
   return (
-    <Grid container direction='row' justifyContent='center' alignItems='center'>
+    <Grid
+      data-testid='signUp'
+      container
+      direction='row'
+      justifyContent='center'
+      alignItems='center'
+    >
       <TermsDialog
         open={open}
         setOpen={setOpen}
@@ -98,8 +104,10 @@ export default function SignUp() {
           </Typography>
           <Box component='form' onSubmit={formik.handleSubmit}>
             <TextField
+              inputProps={{ 'data-testid': 'required-email' }}
               margin='normal'
               fullWidth
+              required
               autoFocus
               label={t('Email Address')}
               id='email'
@@ -111,9 +119,11 @@ export default function SignUp() {
               <div style={errorStyle}>{formik.errors.email}</div>
             )}
             <TextField
+              inputProps={{ 'data-testid': 'required-firstName' }}
               margin='normal'
               fullWidth
               autoFocus
+              required
               label={t('First Name')}
               id='firstName'
               name='firstName'
@@ -124,9 +134,11 @@ export default function SignUp() {
               <div style={errorStyle}>{formik.errors.firstName}</div>
             )}
             <TextField
+              inputProps={{ 'data-testid': 'required-lastName' }}
               margin='normal'
               fullWidth
               autoFocus
+              required
               label={t('Last Name')}
               id='lastName'
               name='lastName'
@@ -137,8 +149,10 @@ export default function SignUp() {
               <div style={errorStyle}>{formik.errors.lastName}</div>
             )}
             <TextField
+              inputProps={{ 'data-testid': 'required-username' }}
               margin='normal'
               fullWidth
+              required
               autoFocus
               label={t('Username')}
               id='username'
@@ -150,9 +164,10 @@ export default function SignUp() {
               <div style={errorStyle}>{formik.errors.username}</div>
             )}
             <TextField
-              data-testid='passwordButton'
+              inputProps={{ 'data-testid': 'required-password' }}
               margin='normal'
               fullWidth
+              required
               autoFocus
               label={t('Password')}
               id='password'
@@ -165,9 +180,11 @@ export default function SignUp() {
               <div style={errorStyle}>{formik.errors.password}</div>
             )}
             <TextField
+              inputProps={{ 'data-testid': 'required-confirmPassword' }}
               margin='normal'
               fullWidth
               autoFocus
+              required
               label={t('Confirm password')}
               id='confirmPassword'
               type='password'
@@ -182,6 +199,7 @@ export default function SignUp() {
             <FormControlLabel
               control={
                 <Checkbox
+                  data-testid='checkbox'
                   onClick={() => setOpen(true)}
                   value='term'
                   color='primary'

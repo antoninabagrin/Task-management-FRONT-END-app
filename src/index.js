@@ -4,20 +4,21 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { CssBaseline } from '@mui/material';
+import './utils/languages/i18n';
 import { Provider } from 'react-redux';
 import store from './store';
-import './utils/languages/i18n';
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssBaseline>
-      <BrowserRouter>
-        <Provider store={store}>
+    <Provider store={store}>
+      <CssBaseline>
+        <BrowserRouter>
           <App />
-        </Provider>
-      </BrowserRouter>
-    </CssBaseline>
+        </BrowserRouter>
+      </CssBaseline>
+    </Provider>
   </React.StrictMode>,
+
   document.getElementById('root'),
 );
 
