@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost:8080",
+  "experimentalStudio": true,
+  "env": {
+    "validUserEmail": "user1",
+    "validUserPassword": "qwe123QWE!@#"
+  },
+  "projectId": "task"
+}
