@@ -43,7 +43,6 @@ export default function Dashboard() {
   };
 
   const handleGetTask = async (taskId) => {
-    console.log('heyy');
     history(`/dashboard/${taskId}`);
     setOpenTask(true);
   };
@@ -62,7 +61,7 @@ export default function Dashboard() {
         setOpen={setOpen}
         selectedTaskId={selectedTaskId}
       />
-      <Grid>
+      <Grid item>
         <TaskDialog open={openTask} setOpenTask={setOpenTask} />
       </Grid>
       <Grid item xs={12} md={8} style={{ height: '100%' }}>
@@ -87,14 +86,25 @@ export default function Dashboard() {
               {tasks.tasks
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((task, index) => (
-                  <TableRow
-                    key={index}
-                    hover
-                    onClick={() => handleGetTask(task.id)}
-                  >
-                    <TableCell align='center'>{task.title}</TableCell>
-                    <TableCell align='center'>{task.description}</TableCell>
-                    <TableCell align='center'>{task.status}</TableCell>
+                  <TableRow key={index} hover>
+                    <TableCell
+                      align='center'
+                      onClick={() => handleGetTask(task.id)}
+                    >
+                      {task.title}{' '}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      onClick={() => handleGetTask(task.id)}
+                    >
+                      {task.description}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      onClick={() => handleGetTask(task.id)}
+                    >
+                      {task.status}
+                    </TableCell>
                     <TableCell align='center'>
                       <IconButton
                         size='large'
