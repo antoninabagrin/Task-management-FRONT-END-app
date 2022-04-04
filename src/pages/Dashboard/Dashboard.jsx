@@ -14,7 +14,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import AlertDialog from './DeleteTaskDialog';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getTasks, selectTasks } from '../../features/tasks/tasksSlice';
 import { useTranslation } from 'react-i18next';
 import AddTask from './AddTask';
@@ -23,6 +23,7 @@ import TaskDialog from './TaskDialog';
 export default function Dashboard() {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
+  const params = useParams();
 
   const [selectedTaskId, setSelectedTaskId] = React.useState(null);
   const [openTask, setOpenTask] = React.useState(false);
@@ -35,6 +36,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     dispatch(getTasks());
+    params.taskId && handleGetTask(params.taskId);
   }, [dispatch]);
 
   const handleDeleteTask = async (taskId) => {

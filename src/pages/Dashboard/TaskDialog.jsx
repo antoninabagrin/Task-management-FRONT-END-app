@@ -9,11 +9,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { selectTasks } from '../../features/tasks/tasksSlice';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 export default function TaskDialog({ open, setOpenTask }) {
   const [taskFound, setTaskFound] = React.useState(null);
   const tasks = useSelector(selectTasks).tasks;
   const history = useNavigate();
+  const { t } = useTranslation();
   const params = useParams();
 
   const closeDialog = () => {
@@ -29,16 +31,18 @@ export default function TaskDialog({ open, setOpenTask }) {
   return (
     <div>
       <Dialog open={open} onClose={() => closeDialog()}>
-        <DialogTitle>{'My task details:'}</DialogTitle>
+        <DialogTitle>{t('My task details:')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {taskFound && taskFound.taskMetadata.details}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => closeDialog()}>Set as completed!</Button>
+          <Button onClick={() => closeDialog()}>
+            {t('Set as completed!')}
+          </Button>
           <Button onClick={() => closeDialog()} autoFocus>
-            Share!
+            {t('Share!')}
           </Button>
         </DialogActions>
       </Dialog>
