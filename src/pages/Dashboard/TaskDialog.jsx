@@ -30,7 +30,12 @@ export default function TaskDialog({ open, setOpenTask }) {
 
   return (
     <div>
-      <Dialog open={open} onClose={() => closeDialog()}>
+      <Dialog
+        fullWidth={Boolean(true)}
+        maxWidth='sm'
+        open={open}
+        onClose={() => closeDialog()}
+      >
         <DialogTitle>{t('My task details:')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
