@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -11,9 +10,12 @@ import {
 import { useDispatch } from 'react-redux';
 import { getTasks } from '../../features/tasks/tasksSlice';
 import axios from '../../utils/axios';
+import { useTranslation } from 'react-i18next';
+import '../styling/Box.scss';
 
 export default function AlertDialog({ open, setOpen, selectedTaskId }) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const deleteTask = async () => {
     await axios.delete(`/tasks/${selectedTaskId}`);
@@ -23,7 +25,8 @@ export default function AlertDialog({ open, setOpen, selectedTaskId }) {
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogTitle item>Delete task</DialogTitle>
+      <div className='myBox'></div>
+      <DialogTitle>Delete task</DialogTitle>
 
       <Divider />
       <DialogContent>
@@ -35,10 +38,16 @@ export default function AlertDialog({ open, setOpen, selectedTaskId }) {
       <Divider />
 
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Disagree</Button>
+        <a href='#' className='myButton' onClick={() => setOpen(false)}>
+          {t(' Disagree')}
+        </a>
+        <a href='#' className='myButton' onClick={() => deleteTask()}>
+          {t('Agree')}
+        </a>
+        {/* <Button onClick={() => setOpen(false)}>Disagree</Button>
         <Button onClick={() => deleteTask()} autoFocus>
           Agree
-        </Button>
+        </Button> */}
       </DialogActions>
     </Dialog>
   );

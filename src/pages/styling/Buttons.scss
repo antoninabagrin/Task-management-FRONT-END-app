@@ -1,9 +1,9 @@
 .myButton {
   box-shadow: inset 0px 1px 0px 0px #efdcfb;
-  background: linear-gradient(to bottom, #dfbdfa 5%, #bc80ea 100%);
-  background-color: #dfbdfa;
+  background: linear-gradient(to bottom, #65dfca 5%, #004d40 100%);
+  background-color: #65dfca;
   border-radius: 6px;
-  border: 1px solid #c584f3;
+  border: 1px solid #69ecd6;
   display: inline-block;
   cursor: pointer;
   color: #ffffff;
@@ -12,11 +12,13 @@
   font-weight: bold;
   padding: 6px 24px;
   text-decoration: none;
-  text-shadow: 0px 1px 0px #9752cc;
+  text-shadow: 0px 1px 0px #3bac99;
+  width: 100%;
+  text-align: center;
 }
 .myButton:hover {
-  background: linear-gradient(to bottom, #bc80ea 5%, #dfbdfa 100%);
-  background-color: #bc80ea;
+  background: linear-gradient(to bottom, #004d40 5%, #65dfca 100%);
+  background-color: #004d40;
 }
 .myButton:active {
   position: relative;

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -13,7 +12,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from '../utils/axios';
 import { useDispatch } from 'react-redux';
-import { handleLogin, setIsAuth } from '../features/user/userSlice';
+import { setIsAuth } from '../features/user/userSlice';
 import { useTranslation } from 'react-i18next';
 import './styling/Buttons.scss';
 
