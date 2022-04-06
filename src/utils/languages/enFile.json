@@ -36,4 +36,11 @@
   "Disagree": "Disagree",
   "Delete task": "Delete task",
   "My task details": "My task details: "
+  "Upload Photo": "Upload Photo",
+  "Location": "Location",
+  "Number": "Number",
+  "Telephone": "Telephone",
+  "Address": "Address",
+  "errorImageWrongFormat": "errorImageWrongFormat",
+  "Save": "Save"
 }

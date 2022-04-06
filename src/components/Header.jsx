@@ -8,19 +8,37 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LanguageIcon from '@mui/icons-material/Language';
-import { Menu, MenuItem } from '@mui/material';
+import { Avatar, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { setIsAuth } from '../features/userSlice';
+import { setIsAuth } from '../features/user/userSlice';
 import languages from '../utils/languages/languagesData';
 import { useTranslation } from 'react-i18next';
+import { Settings } from '@mui/icons-material';
+import { useEffect } from 'react';
+import { getUserImage } from '../features/user/userImageSlice';
 
 export default function Header() {
   const isAuth = useSelector((state) => state.user.isAuth);
+  const profileImage = useSelector((state) => state.userImage.profileImage);
+  const userProfileImage = useSelector((state) => state.user.user.profileImage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [t, i18n] = useTranslation();
   const [languageMenu, setLanguageMenu] = useState(false);
+  const [userMenu, setUserMenu] = useState(false);
+  const [image, setImage] = useState(null);
+  const anchorRef = React.useRef(null);
+
+  useEffect(() => {
+    if (!userProfileImage?.length > 0) {
+      dispatch(getUserImage());
+    }
+  }, [dispatch, userProfileImage]);
+
+  useEffect(() => {
+    setImage(profileImage || null);
+  }, [profileImage]);
 
   const Logout = () => {
     dispatch(setIsAuth(false));
@@ -37,6 +55,21 @@ export default function Header() {
     setLanguageMenu(false);
   };
 
+  const handleOpenUserMenu = () => {
+    setUserMenu(true);
+  };
+
+  const handleCloseUserMenu = () => {
+    setUserMenu(false);
+  };
+
+  const handleSettings = (token) => {
+    if (token) {
+      localStorage.setItem('jwt', token);
+      dispatch(setIsAuth(true));
+      navigate('/usersettings');
+    }
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static'>
@@ -64,9 +97,34 @@ export default function Header() {
             </Link>
           )}
           {isAuth && (
-            <Button onClick={() => Logout()} color='inherit'>
-              {t('Sign Out')}
-            </Button>
+            <Box>
+              <IconButton onClick={() => handleOpenUserMenu()}>
+                <Avatar alt={image} src={image} ref={anchorRef} />
+              </IconButton>
+              <Menu
+                anchorEl={anchorRef.current}
+                open={Boolean(userMenu)}
+                onClose={handleCloseUserMenu}
+                onClick={handleCloseUserMenu}
+              >
+                {userMenu && (
+                  <MenuItem onClick={() => handleSettings()}>
+                    <ListItemIcon>
+                      <Settings fontSize='small' />
+                    </ListItemIcon>
+                    <Link
+                      to='/usersettings'
+                      style={{ textDecoration: 'none', color: 'white' }}
+                    >
+                      <Button color='primary'>{t('Settings')}</Button>
+                    </Link>
+                  </MenuItem>
+                )}
+              </Menu>
+              <Button onClick={() => Logout()} color='inherit'>
+                {t('Sign Out')}
+              </Button>
+            </Box>
           )}
           {!isAuth && (
             <Link
