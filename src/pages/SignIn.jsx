@@ -87,15 +87,6 @@ export default function SignIn() {
           <a href='#' className='myButton' onClick={handleSubmit}>
             {t('Sign In')}
           </a>
-
-          {/* <Button
-            type='submit'
-            fullWidth
-            variant='contained'
-            onClick={handleLogin}
-          >
-            {t('Sign In')}
-          </Button> */}
           <Grid container>
             <Grid item xs>
               <Link href='#' variant='body2'>

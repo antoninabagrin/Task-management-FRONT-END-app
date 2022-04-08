@@ -65,9 +65,6 @@ export default function AddTask() {
         <a href='#' className='myButton' onClick={() => handleAddTask()}>
           {t('Add a task')}
         </a>
-        {/* <Button onClick={() => handleAddTask()} variant='outlined'>
-          {t('Add a task')}
-        </Button> */}
       </Box>
     </Box>
   );

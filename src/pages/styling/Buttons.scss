@@ -1,4 +1,5 @@
-.myButton {
+.myButton,
+.joinButton {
   box-shadow: inset 0px 1px 0px 0px #efdcfb;
   background: linear-gradient(to bottom, #65dfca 5%, #004d40 100%);
   background-color: #65dfca;
@@ -16,11 +17,19 @@
   width: 100%;
   text-align: center;
 }
-.myButton:hover {
+.myButton:hover,
+.joinButton:hover {
   background: linear-gradient(to bottom, #004d40 5%, #65dfca 100%);
   background-color: #004d40;
 }
 .myButton:active {
   position: relative;
   top: 1px;
+}
+
+.joinButton:disabled {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: auto;
 }
