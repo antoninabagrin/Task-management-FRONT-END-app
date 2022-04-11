@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Grid,
   Paper,
@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getTasks, selectTasks } from '../../features/tasks/tasksSlice';
 import { useTranslation } from 'react-i18next';
 import AddTask from './AddTask';
+import { ref } from 'yup';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ export default function Dashboard() {
   const { t } = useTranslation();
   const tasks = useSelector(selectTasks);
   const headerWeight = { fontWeight: '700' };
+  const myRef = useRef(null);
 
   useEffect(() => {
     dispatch(getTasks());
@@ -38,6 +40,7 @@ export default function Dashboard() {
   };
 
   const handleChangePage = (event, newPage) => {
+    myRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     setPage(newPage);
   };
 
@@ -54,8 +57,12 @@ export default function Dashboard() {
       />
 
       <Grid item xs={12} md={8} style={{ height: '100%' }}>
-        <TableContainer component={Paper} sx={{ marginTop: 5 }}>
-          <Table sx={{ minWidth: '580px' }}>
+        <TableContainer
+          component={Paper}
+          sx={{ marginTop: 8, maxHeight: 480 }}
+          ref={myRef}
+        >
+          <Table sx={{ minWidth: '580px' }} stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell sx={headerWeight} align='center'>
