@@ -109,14 +109,16 @@ export default function Header() {
               >
                 {userMenu && (
                   <MenuItem onClick={() => handleSettings()}>
-                    <ListItemIcon>
-                      <Settings fontSize='small' />
-                    </ListItemIcon>
                     <Link
                       to='/usersettings'
                       style={{ textDecoration: 'none', color: 'white' }}
                     >
-                      <Button color='primary'>{t('Settings')}</Button>
+                      <Button color='primary'>
+                        <ListItemIcon>
+                          <Settings fontSize='small' />
+                        </ListItemIcon>
+                        {t('Settings')}
+                      </Button>
                     </Link>
                   </MenuItem>
                 )}
