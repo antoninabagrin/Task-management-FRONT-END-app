@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getTasks, selectTasks } from '../../features/tasks/tasksSlice';
 import { useTranslation } from 'react-i18next';
 import AddTask from './AddTask';
-import { ref } from 'yup';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
