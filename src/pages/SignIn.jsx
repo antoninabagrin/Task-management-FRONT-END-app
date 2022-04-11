@@ -24,7 +24,7 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const from = location.state?.from?.pathname || '/protected';
+  const from = location.state?.from?.pathname || '/dashboard';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
