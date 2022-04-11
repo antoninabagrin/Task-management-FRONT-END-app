@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { getTasks } from '../../features/tasks/tasksSlice';
 import axios from '../../utils/axios';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +34,7 @@ export default function AlertDialog({ open, setOpen, selectedTaskId }) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [wrapperRef]);
+
 
   const deleteTask = async () => {
     await axios.delete(`/tasks/${selectedTaskId}`);
