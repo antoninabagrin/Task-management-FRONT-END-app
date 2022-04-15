@@ -15,10 +15,12 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import AlertDialog from './DeleteTaskDialog';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getTasks, selectTasks } from '../../features/tasks/tasksSlice';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import CreateTask from './CreateTask';
+import TaskDialog from './TaskDialog';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -27,12 +29,16 @@ export default function Dashboard() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const params = useParams();
+  const [openTask, setOpenTask] = React.useState(false);
   const { t } = useTranslation();
   const tasks = useSelector(selectTasks);
+  const history = useNavigate();
   const headerWeight = { fontWeight: '700' };
 
   useEffect(() => {
     dispatch(getTasks());
+    params.taskId && handleGetTask(params.taskId);
   }, [dispatch]);
 
   const handleDeleteTask = async (taskId) => {
@@ -40,6 +46,10 @@ export default function Dashboard() {
     setOpen(true);
   };
 
+  const handleGetTask = async (taskId) => {
+    history(`/dashboard/${taskId}`);
+    setOpenTask(true);
+  };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -66,6 +76,9 @@ export default function Dashboard() {
         </Fab>
       </Grid>
       <CreateTask wizardOpen={wizardOpen} setWizardOpen={setWizardOpen} />
+      <Grid item>
+        <TaskDialog open={openTask} setOpenTask={setOpenTask} />
+      </Grid>
       <Grid item xs={12} md={8} style={{ height: '100%' }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: '580px' }}>
@@ -88,10 +101,25 @@ export default function Dashboard() {
               {tasks.tasks
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((task, index) => (
-                  <TableRow key={index}>
-                    <TableCell align='center'>{task.title}</TableCell>
-                    <TableCell align='center'>{task.description}</TableCell>
-                    <TableCell align='center'>{task.status}</TableCell>
+                  <TableRow key={index} hover>
+                    <TableCell
+                      align='center'
+                      onClick={() => handleGetTask(task.id)}
+                    >
+                      {task.title}{' '}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      onClick={() => handleGetTask(task.id)}
+                    >
+                      {task.description}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      onClick={() => handleGetTask(task.id)}
+                    >
+                      {task.status}
+                    </TableCell>
                     <TableCell align='center'>
                       <IconButton
                         size='large'
