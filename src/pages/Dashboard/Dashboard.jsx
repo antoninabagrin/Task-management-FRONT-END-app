@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Grid,
   Paper,
@@ -33,6 +33,7 @@ export default function Dashboard() {
   const tasks = useSelector(selectTasks);
   const history = useNavigate();
   const headerWeight = { fontWeight: '700' };
+  const myRef = useRef(null);
 
   useEffect(() => {
     dispatch(getTasks());
@@ -49,6 +50,7 @@ export default function Dashboard() {
     setOpenTask(true);
   };
   const handleChangePage = (event, newPage) => {
+    myRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     setPage(newPage);
   };
 
@@ -67,8 +69,12 @@ export default function Dashboard() {
         <TaskDialog open={openTask} setOpenTask={setOpenTask} />
       </Grid>
       <Grid item xs={12} md={8} style={{ height: '100%' }}>
-        <TableContainer component={Paper} sx={{ marginTop: 5 }}>
-          <Table sx={{ minWidth: '580px' }}>
+        <TableContainer
+          component={Paper}
+          sx={{ marginTop: 8, maxHeight: 480 }}
+          ref={myRef}
+        >
+          <Table sx={{ minWidth: '580px' }} stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell sx={headerWeight} align='center'>
