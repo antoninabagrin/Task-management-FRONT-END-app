@@ -13,7 +13,7 @@ import { handleLogin, handleLogout, setUser } from './features/user/userSlice';
 import jwt_decode from 'jwt-decode';
 import SignUp from './pages/SignUp/SignUp';
 import UserSettings from './pages/UserSettings';
-
+import { ParseExcel } from './pages/Dashboard/ParseExcel';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,13 +21,13 @@ function App() {
   const isAuth = useSelector((state) => state.user.isAuth);
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem('jwt');
 
     if (token) {
       const { exp, user } = jwt_decode(token, { complete: true });
       dispatch(setUser(user));
       if (exp * 1000 < Date.now()) {
-        localStorage.removeItem("jwt");
+        localStorage.removeItem('jwt');
         dispatch(handleLogout());
       } else {
         dispatch(handleLogin());
@@ -39,9 +39,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <Header />
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path='/home' element={<Home />} />
         <Route
-          path="/dashboard"
+          path='/dashboard'
           element={
             <RequireAuth>
               <Dashboard />
@@ -49,20 +49,20 @@ function App() {
           }
         />
         <Route
-          path="/dashboard/:taskId"
+          path='/dashboard/:taskId'
           element={
             <RequireAuth>
               <Dashboard />
             </RequireAuth>
           }
         />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/signin' element={<SignIn />} />
 
         <Route path='usersettings' element={<UserSettings />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
-
+        <Route path='/parse-excel' element={<ParseExcel />} />
       </Routes>
     </ThemeProvider>
   );
