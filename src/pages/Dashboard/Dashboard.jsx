@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Grid,
   Paper,
@@ -10,6 +10,7 @@ import {
   TableRow,
   IconButton,
   TablePagination,
+  Fab,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AlertDialog from './DeleteTaskDialog';
@@ -17,18 +18,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getTasks, selectTasks } from '../../features/tasks/tasksSlice';
 import { useTranslation } from 'react-i18next';
-import AddTask from './AddTask';
+import AddIcon from '@mui/icons-material/Add';
+import CreateTask from './CreateTask';
 import TaskDialog from './TaskDialog';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [wizardOpen, setWizardOpen] = useState(false);
   const params = useParams();
-
-  const [selectedTaskId, setSelectedTaskId] = React.useState(null);
   const [openTask, setOpenTask] = React.useState(false);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const { t } = useTranslation();
   const tasks = useSelector(selectTasks);
   const history = useNavigate();
@@ -56,6 +58,11 @@ export default function Dashboard() {
     setRowsPerPage(event.target.value);
     setPage(0);
   };
+
+  const handleWizardOpen = () => {
+    setWizardOpen(true);
+  };
+
   return (
     <Grid container direction='row' justifyContent='center' alignItems='center'>
       <AlertDialog
@@ -63,11 +70,17 @@ export default function Dashboard() {
         setOpen={setOpen}
         selectedTaskId={selectedTaskId}
       />
+      <Grid container justifyContent={'flex-end'} sx={{ margin: 2 }}>
+        <Fab color='primary' onClick={() => handleWizardOpen()}>
+          <AddIcon />
+        </Fab>
+      </Grid>
+      <CreateTask wizardOpen={wizardOpen} setWizardOpen={setWizardOpen} />
       <Grid item>
         <TaskDialog open={openTask} setOpenTask={setOpenTask} />
       </Grid>
       <Grid item xs={12} md={8} style={{ height: '100%' }}>
-        <TableContainer component={Paper} sx={{ marginTop: 5 }}>
+        <TableContainer component={Paper}>
           <Table sx={{ minWidth: '580px' }}>
             <TableHead>
               <TableRow>
@@ -129,7 +142,6 @@ export default function Dashboard() {
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-        <AddTask />
       </Grid>
     </Grid>
   );
